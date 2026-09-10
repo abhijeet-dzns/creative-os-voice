@@ -1482,41 +1482,29 @@
      VOICE SEND
      ========================================================= */
 
-  function sendVoiceCommand(command) {
+function sendVoiceCommand(command) {
+  const params = new URLSearchParams({
+    voice: "1",
+    command: command,
+    text: command,
+    transcript: command,
+    source: "creative-os-voice"
+  });
 
-    command = String(command || "").trim();
+  const url = API_URL + "?" + params.toString();
 
-    if (!command) return;
-
-
-    document.getElementById("voiceStatus").textContent =
-      "Sending command...";
-
-
-    const params = new URLSearchParams();
-
-    params.set("voice", "1");
-
-    params.set("command", command);
-
-    params.set("text", command);
-
-    params.set("transcript", command);
-
-    params.set("source", "creative-os-dashboard");
-
-
-    const beacon = new Image();
-
-
-    beacon.onload = function() {
-
-      document.getElementById("voiceStatus").textContent =
-        "Command sent";
-
-      setTimeout(loadCreativeOS, 1200);
-
-    };
+  fetch(url, {
+    method: "GET",
+    mode: "no-cors",
+    keepalive: true
+  })
+  .then(() => {
+    setStatus("Command sent to Creative OS");
+  })
+  .catch(() => {
+    setStatus("Could not send command");
+  });
+}
 
 
     beacon.onerror = function() {
