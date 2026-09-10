@@ -2,131 +2,205 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creative OS Voice</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<title>Creative OS • Voice Remote</title>
 
 <style>
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:#090a0d;
-  color:#f5f6f8;
-  font-family:Arial,sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #080b0f;
+  color: #f4f5f7;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
-.app{
-  width:min(430px,100%);
-  padding:24px;
+body {
+  min-height: 100vh;
 }
 
-.brand{
-  font-size:28px;
-  font-weight:700;
-  letter-spacing:-.8px;
+.app {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 42px 20px 60px;
 }
 
-.sub{
-  margin-top:6px;
-  color:#8b919d;
-  font-size:12px;
+.header {
+  margin-bottom: 34px;
 }
 
-.card{
-  margin-top:22px;
-  background:#121419;
-  border:1px solid #292d36;
-  border-radius:20px;
-  padding:22px;
+.title {
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
 }
 
-.voice{
-  width:92px;
-  height:92px;
-  border-radius:50%;
-  border:1px solid #292d36;
-  background:#191c22;
-  color:#f5f6f8;
-  font-size:34px;
-  display:block;
-  margin:18px auto;
-  cursor:pointer;
-  transition:.2s;
+.subtitle {
+  color: #858b96;
+  font-size: 16px;
 }
 
-.voice:hover{
-  transform:scale(1.04);
+.card {
+  background: #111419;
+  border: 1px solid #292e36;
+  border-radius: 28px;
+  padding: 38px 28px 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
 }
 
-.voice.listening{
-  background:#f4f5f7;
-  color:#090a0d;
+.voice-area {
+  text-align: center;
 }
 
-.status{
-  text-align:center;
-  color:#8b919d;
-  font-size:12px;
-  min-height:18px;
+.mic {
+  width: 154px;
+  height: 154px;
+  border-radius: 50%;
+  border: 1px solid #343b46;
+  background: #171c24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  cursor: pointer;
+  transition: .2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.transcript{
-  margin-top:18px;
-  padding:14px;
-  background:#191c22;
-  border:1px solid #292d36;
-  border-radius:12px;
-  font-size:13px;
-  line-height:1.5;
-  min-height:48px;
-  word-break:break-word;
+.mic:active {
+  transform: scale(.96);
 }
 
-.result{
-  margin-top:10px;
-  padding:14px;
-  border-radius:12px;
-  background:#191c22;
-  border:1px solid #292d36;
-  font-size:12px;
-  line-height:1.5;
-  display:none;
+.mic.listening {
+  transform: scale(1.04);
+  border-color: #777f8d;
+  box-shadow:
+    0 0 0 8px rgba(255,255,255,.035),
+    0 0 45px rgba(255,255,255,.08);
 }
 
-.result.show{
-  display:block;
+.mic-icon {
+  font-size: 64px;
+  line-height: 1;
 }
 
-.result.success{
-  color:#74d69b;
+.status {
+  color: #8e949e;
+  font-size: 17px;
+  min-height: 25px;
 }
 
-.result.error{
-  color:#ff7777;
+.transcript,
+.result {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: #181d25;
+  border: 1px solid #2a3039;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
-.examples{
-  margin-top:18px;
-  color:#8b919d;
-  font-size:11px;
-  line-height:1.7;
+.transcript {
+  color: #e6e8ec;
 }
 
-.examples b{
-  color:#f5f6f8;
+.result {
+  color: #b8bec8;
 }
 
-.footer{
-  text-align:center;
-  color:#555b66;
-  font-size:10px;
-  margin-top:18px;
+.result.success {
+  color: #dfe3e8;
+}
+
+.result.error {
+  color: #ff7777;
+}
+
+.label {
+  display: block;
+  color: #747b86;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+
+.connection {
+  margin-top: 24px;
+  width: 100%;
+  border: 1px solid #303640;
+  background: #171c23;
+  color: #e5e8ec;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.connection:active {
+  transform: scale(.99);
+}
+
+.examples {
+  margin-top: 28px;
+}
+
+.examples-title {
+  color: #8b919b;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.example {
+  color: #8f96a1;
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 7px 0;
+}
+
+.footer {
+  text-align: center;
+  color: #4f555e;
+  font-size: 12px;
+  margin-top: 30px;
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 34px 16px 45px;
+  }
+
+  .title {
+    font-size: 34px;
+  }
+
+  .card {
+    padding: 32px 20px 25px;
+    border-radius: 24px;
+  }
+
+  .mic {
+    width: 145px;
+    height: 145px;
+  }
 }
 </style>
 </head>
@@ -135,35 +209,62 @@ body{
 
 <div class="app">
 
-  <div class="brand">Creative OS</div>
-  <div class="sub">Voice remote</div>
+  <div class="header">
+    <div class="title">Creative OS</div>
+    <div class="subtitle">Voice remote</div>
+  </div>
 
   <div class="card">
 
+    <div class="voice-area">
+
+      <div
+        id="mic"
+        class="mic"
+        onclick="startListening()"
+        aria-label="Voice command"
+      >
+        <div class="mic-icon">🎙️</div>
+      </div>
+
+      <div id="status" class="status">
+        Tap microphone to speak
+      </div>
+
+    </div>
+
+    <div id="transcript" class="transcript" style="display:none;"></div>
+
+    <div id="result" class="result" style="display:none;"></div>
+
     <button
-      id="voiceBtn"
-      class="voice"
-      onclick="toggleVoice()"
-      aria-label="Voice command">
-      🎙️
+      class="connection"
+      onclick="connectionTest()"
+    >
+      Test Creative OS connection
     </button>
 
-    <div id="status" class="status">
-      Tap the mic and speak
-    </div>
-
-    <div id="transcript" class="transcript">
-      Your command will appear here.
-    </div>
-
-    <div id="result" class="result"></div>
-
     <div class="examples">
-      <b>Try:</b><br>
-      Add a task called poster design<br>
-      Add a job task called Gbazar packaging, urgent, deadline 12 September<br>
-      Remind me tomorrow at 10 AM to export the video<br>
-      Complete task 001
+
+      <div class="examples-title">Try:</div>
+
+      <div class="example">
+        Add a task called poster design
+      </div>
+
+      <div class="example">
+        Add a job task called Gbazar packaging,
+        urgent, deadline 12 September
+      </div>
+
+      <div class="example">
+        Remind me tomorrow at 10 AM to export the video
+      </div>
+
+      <div class="example">
+        Complete task 001
+      </div>
+
     </div>
 
   </div>
@@ -176,33 +277,351 @@ body{
 
 <script>
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbzVJQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzVJQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
 
 let recognition = null;
 let listening = false;
-let finalText = "";
+let requestTimeout = null;
 
-const $ = id => document.getElementById(id);
 
-function setStatus(text){
-  $("status").textContent = text;
+/* -----------------------------------------
+   SPEECH RECOGNITION
+----------------------------------------- */
+
+function setupSpeechRecognition() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    setStatus(
+      "Voice recognition is not supported in this browser."
+    );
+    return false;
+  }
+
+  recognition = new SpeechRecognition();
+
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = function() {
+
+    listening = true;
+
+    document
+      .getElementById("mic")
+      .classList.add("listening");
+
+    setStatus("Listening...");
+  };
+
+  recognition.onresult = function(event) {
+
+    const text =
+      event.results[0][0].transcript.trim();
+
+    showTranscript(text);
+
+    setStatus("Sending command...");
+
+    sendVoiceCommand(text);
+  };
+
+  recognition.onerror = function(event) {
+
+    listening = false;
+
+    document
+      .getElementById("mic")
+      .classList.remove("listening");
+
+    if (event.error === "not-allowed") {
+
+      setStatus(
+        "Microphone permission was blocked."
+      );
+
+    } else {
+
+      setStatus(
+        "Voice error: " + event.error
+      );
+    }
+  };
+
+  recognition.onend = function() {
+
+    listening = false;
+
+    document
+      .getElementById("mic")
+      .classList.remove("listening");
+  };
+
+  return true;
 }
 
-function showResult(message, success){
-  const box = $("result");
 
-  box.textContent = message || "Command completed.";
+function startListening() {
+
+  if (!recognition) {
+
+    if (!setupSpeechRecognition()) {
+      return;
+    }
+  }
+
+  if (listening) {
+
+    recognition.stop();
+
+    return;
+  }
+
+  hideResult();
+
+  try {
+
+    recognition.start();
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      "Could not start microphone."
+    );
+  }
+}
+
+
+/* -----------------------------------------
+   UI
+----------------------------------------- */
+
+function setStatus(text) {
+
+  document.getElementById("status").textContent =
+    text;
+}
+
+
+function showTranscript(text) {
+
+  const box =
+    document.getElementById("transcript");
+
+  box.style.display = "block";
+
+  box.innerHTML =
+    '<span class="label">You said</span>' +
+    escapeHtml(text);
+}
+
+
+function showResult(message, success) {
+
+  const box =
+    document.getElementById("result");
+
+  box.style.display = "block";
 
   box.className =
-    "result show " +
+    "result " +
     (success ? "success" : "error");
+
+  box.innerHTML =
+    '<span class="label">Creative OS</span>' +
+    escapeHtml(message);
 }
 
-function speak(text){
-  if(!("speechSynthesis" in window)) return;
 
-  try{
+function hideResult() {
+
+  const box =
+    document.getElementById("result");
+
+  box.style.display = "none";
+}
+
+
+function escapeHtml(value) {
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+/* -----------------------------------------
+   GOOGLE APPS SCRIPT JSONP
+----------------------------------------- */
+
+function sendVoiceCommand(command) {
+
+  const callbackName =
+    "creativeOSCallback_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 100000);
+
+  const script =
+    document.createElement("script");
+
+  const params = new URLSearchParams();
+
+  params.set("voice", "1");
+  params.set("command", command);
+  params.set("callback", callbackName);
+
+  const url =
+    APPS_SCRIPT_URL +
+    "?" +
+    params.toString();
+
+  let finished = false;
+
+  function cleanup() {
+
+    if (finished) return;
+
+    finished = true;
+
+    if (requestTimeout) {
+      clearTimeout(requestTimeout);
+      requestTimeout = null;
+    }
+
+    window[callbackName] = null;
+
+    try {
+      delete window[callbackName];
+    } catch (e) {}
+
+    if (script.parentNode) {
+      script.parentNode.removeChild(script);
+    }
+  }
+
+
+  window[callbackName] = function(data) {
+
+    cleanup();
+
+    if (!data) {
+
+      setStatus("No response received.");
+
+      showResult(
+        "Creative OS returned no response.",
+        false
+      );
+
+      return;
+    }
+
+    if (data.success) {
+
+      setStatus("Command completed.");
+
+      showResult(
+        data.message ||
+        "Command completed successfully.",
+        true
+      );
+
+      speak(
+        data.message ||
+        "Done."
+      );
+
+    } else {
+
+      setStatus("Command failed.");
+
+      showResult(
+        data.message ||
+        "Creative OS could not complete the command.",
+        false
+      );
+
+      speak(
+        data.message ||
+        "The command failed."
+      );
+    }
+  };
+
+
+  script.onerror = function() {
+
+    cleanup();
+
+    setStatus("Connection failed.");
+
+    showResult(
+      "Creative OS could not be reached. Check the Apps Script deployment.",
+      false
+    );
+  };
+
+
+  script.src = url;
+
+  document.body.appendChild(script);
+
+
+  requestTimeout = setTimeout(function() {
+
+    cleanup();
+
+    setStatus("Connection timed out.");
+
+    showResult(
+      "Creative OS did not respond. Make sure the Apps Script web app is deployed as 'Anyone'.",
+      false
+    );
+
+  }, 20000);
+}
+
+
+/* -----------------------------------------
+   CONNECTION TEST
+----------------------------------------- */
+
+function connectionTest() {
+
+  hideResult();
+
+  showTranscript("connection test");
+
+  setStatus("Testing connection...");
+
+  sendVoiceCommand("connection test");
+}
+
+
+/* -----------------------------------------
+   TEXT TO SPEECH
+----------------------------------------- */
+
+function speak(text) {
+
+  if (!("speechSynthesis" in window)) {
+    return;
+  }
+
+  try {
+
     window.speechSynthesis.cancel();
 
     const utterance =
@@ -212,248 +631,29 @@ function speak(text){
     utterance.rate = 1;
     utterance.pitch = 1;
 
-    window.speechSynthesis.speak(utterance);
-  }catch(e){}
-}
-
-function setupVoice(){
-
-  const SR =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if(!SR){
-
-    setStatus(
-      "Voice input is not supported in this browser"
+    window.speechSynthesis.speak(
+      utterance
     );
 
-    $("voiceBtn").disabled = true;
-    $("voiceBtn").style.opacity = ".4";
+  } catch (error) {
 
-    return;
-  }
-
-  recognition = new SR();
-
-  recognition.lang = "en-IN";
-  recognition.continuous = false;
-  recognition.interimResults = true;
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = function(){
-
-    listening = true;
-    finalText = "";
-
-    $("voiceBtn").classList.add("listening");
-    $("voiceBtn").textContent = "⏹";
-
-    setStatus("Listening...");
-
-    $("transcript").textContent = "";
-    $("result").className = "result";
-  };
-
-  recognition.onresult = function(event){
-
-    let text = "";
-
-    for(
-      let i = event.resultIndex;
-      i < event.results.length;
-      i++
-    ){
-      text += event.results[i][0].transcript;
-    }
-
-    text = text.trim();
-
-    $("transcript").textContent =
-      text || "Listening...";
-
-    const last =
-      event.results[event.results.length - 1];
-
-    if(last && last.isFinal){
-
-      finalText = text;
-
-      if(finalText){
-        sendVoiceCommand(finalText);
-      }
-    }
-  };
-
-  recognition.onerror = function(event){
-
-    listening = false;
-
-    $("voiceBtn").classList.remove("listening");
-    $("voiceBtn").textContent = "🎙️";
-
-    const messages = {
-      "not-allowed":
-        "Microphone permission was blocked.",
-      "service-not-allowed":
-        "Speech service is unavailable.",
-      "no-speech":
-        "No speech detected.",
-      "audio-capture":
-        "No microphone was detected."
-    };
-
-    setStatus(
-      messages[event.error] ||
-      "Voice input error."
-    );
-  };
-
-  recognition.onend = function(){
-
-    listening = false;
-
-    $("voiceBtn").classList.remove("listening");
-    $("voiceBtn").textContent = "🎙️";
-
-    if(!finalText){
-      setStatus("Tap the mic and speak");
-    }
-  };
-}
-
-function toggleVoice(){
-
-  if(!recognition){
-    setupVoice();
-  }
-
-  if(!recognition) return;
-
-  if(listening){
-    recognition.stop();
-    return;
-  }
-
-  finalText = "";
-
-  try{
-    recognition.start();
-  }catch(e){
-    setStatus("Tap the mic again");
+    console.error(error);
   }
 }
 
-function sendVoiceCommand(command){
 
-  setStatus("Sending command...");
+/* -----------------------------------------
+   INITIALIZE
+----------------------------------------- */
 
-  const callbackName =
-    "creativeOSVoice_" +
-    Date.now() +
-    "_" +
-    Math.floor(Math.random()*10000);
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
 
-  let finished = false;
+    setupSpeechRecognition();
 
-  const script =
-    document.createElement("script");
-
-  function cleanup(){
-
-    if(script.parentNode){
-      script.parentNode.removeChild(script);
-    }
-
-    try{
-      delete window[callbackName];
-    }catch(e){
-      window[callbackName] = undefined;
-    }
   }
-
-  window[callbackName] = function(data){
-
-    if(finished) return;
-
-    finished = true;
-
-    cleanup();
-
-    if(data && data.success){
-
-      const message =
-        data.message ||
-        "Command completed.";
-
-      setStatus("Done");
-
-      showResult(message, true);
-
-      speak(message);
-
-    }else{
-
-      const message =
-        data && data.message
-          ? data.message
-          : "The command could not be completed.";
-
-      setStatus("Command failed");
-
-      showResult(message, false);
-
-      speak(message);
-    }
-  };
-
-  script.onerror = function(){
-
-    if(finished) return;
-
-    finished = true;
-
-    cleanup();
-
-    setStatus("Connection failed");
-
-    showResult(
-      "Creative OS could not be reached.",
-      false
-    );
-  };
-
-  const url =
-    API_URL +
-    "?voice=1" +
-    "&command=" +
-    encodeURIComponent(command) +
-    "&callback=" +
-    encodeURIComponent(callbackName);
-
-  script.src = url;
-
-  document.body.appendChild(script);
-
-  setTimeout(function(){
-
-    if(finished) return;
-
-    finished = true;
-
-    cleanup();
-
-    setStatus("No response");
-
-    showResult(
-      "Creative OS did not respond in time.",
-      false
-    );
-
-  }, 25000);
-}
-
-setupVoice();
+);
 
 </script>
 
