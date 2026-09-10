@@ -2,87 +2,460 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Creative OS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative OS Voice</title>
+
 <style>
-*{box-sizing:border-box}html,body{margin:0;background:#090a0d;color:#f3f4f6;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh;display:flex}.sidebar{width:220px;position:fixed;inset:0 auto 0 0;padding:28px 18px;border-right:1px solid #262a32;background:#0c0e12}.brand{font-size:22px;font-weight:750;letter-spacing:-.6px;padding:0 10px}.brand-sub{color:#858b96;font-size:11px;margin:5px 10px 26px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#858b96;text-align:left;padding:11px 12px;border-radius:10px}.nav button:hover,.nav button.active{background:#181b21;color:#f3f4f6}.connection{position:absolute;bottom:25px;left:28px;color:#858b96;font-size:11px;display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:#ff7777}.dot.online{background:#72d59b}.main{margin-left:220px;width:calc(100% - 220px);padding:32px 40px 50px}.page{display:none;max-width:1100px;margin:auto}.page.active{display:block}.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:25px}.eyebrow{color:#858b96;font-size:11px;margin-bottom:7px}.topbar h1{font-size:29px;line-height:1;margin:0 0 8px;letter-spacing:-1px}.date{color:#858b96;font-size:12px}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.button,.primary,.secondary,.danger,.filter{border:1px solid #303540;background:#181b21;color:#f3f4f6;border-radius:9px;padding:9px 13px;font-size:12px}.primary{background:#f3f4f6;color:#090a0d;border-color:#f3f4f6;font-weight:700}.danger{color:#ff8a8a}.filter.active{background:#f3f4f6;color:#090a0d}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card,.section{border:1px solid #262a32;background:#111318;border-radius:15px}.card{padding:18px}.stat-label{font-size:11px;color:#858b96}.stat-value{font-size:29px;font-weight:750;margin-top:9px}.stat-note{font-size:10px;color:#858b96;margin-top:5px}.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}.section{padding:18px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.section-title{font-size:14px;font-weight:700}.list{display:grid;gap:9px}.row{padding:14px;border:1px solid #262a32;background:#0f1115;border-radius:12px}.row-head{display:flex;justify-content:space-between;gap:12px}.row-title{font-size:13px;font-weight:700}.row-meta,.detail,.muted{color:#858b96;font-size:11px;line-height:1.55}.badges{margin-top:8px}.badge{display:inline-block;padding:4px 7px;border-radius:99px;background:#1c2027;color:#cbd0d8;font-size:9px;margin:0 5px 5px 0}.badge.completed{color:#72d59b}.badge.progress{color:#82aaff}.badge.high,.badge.urgent{color:#ff9a9a}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.empty{padding:25px;border:1px dashed #303540;border-radius:12px;color:#858b96;font-size:12px;text-align:center}.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.quick-action{padding:16px;border:1px solid #262a32;background:#111318;color:#f3f4f6;border-radius:12px;text-align:left}.quick-action:hover{background:#181b21}.quick-icon{font-size:18px;margin-bottom:8px}.quick-title{font-size:12px;font-weight:700}.quick-sub{font-size:10px;color:#858b96;margin-top:4px}.section-gap{margin-top:15px}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-box{width:min(720px,100%);max-height:90vh;overflow:auto;background:#111318;border:1px solid #303540;border-radius:16px;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-title{font-size:18px;font-weight:750}.close{background:transparent;border:0;color:#858b96;font-size:22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#858b96;text-transform:uppercase;letter-spacing:.4px}.field input,.field select,.field textarea{width:100%;border:1px solid #303540;background:#0c0e12;color:#f3f4f6;border-radius:9px;padding:10px 11px;outline:none}.field textarea{min-height:90px;resize:vertical}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.hint{font-size:10px;color:#858b96}.drive-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.file-list{margin-top:10px;padding-top:9px;border-top:1px solid #262a32}.file-row{display:flex;gap:7px;align-items:center;padding:5px 0;font-size:11px}.file-row a{color:#b9c7ff;text-decoration:none}.file-row a:hover{text-decoration:underline}.loading{opacity:.6}.toast{position:fixed;right:20px;bottom:20px;background:#f3f4f6;color:#090a0d;padding:11px 14px;border-radius:9px;font-size:12px;font-weight:650;display:none;z-index:100}.voice-status{color:#858b96;font-size:10px;margin-top:5px;text-align:right}.voice-button.listening{background:#f3f4f6;color:#090a0d}.voice-wrap{text-align:right}.mobile-nav{display:none}@media(max-width:800px){.sidebar{display:none}.main{margin:0;width:100%;padding:24px 16px 88px}.stats{grid-template-columns:repeat(2,1fr)}.dashboard-grid{grid-template-columns:1fr}.quick-actions{grid-template-columns:repeat(2,1fr)}.mobile-nav{display:flex;position:fixed;z-index:40;bottom:0;left:0;right:0;background:#111318;border-top:1px solid #262a32;padding:8px;justify-content:space-around}.mobile-nav button{border:0;background:transparent;color:#858b96;font-size:10px;padding:6px}.mobile-nav button.active{color:#f3f4f6}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.topbar h1{font-size:25px}}
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#090a0d;
+  color:#f5f6f8;
+  font-family:Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.app{
+  width:min(430px,100%);
+  padding:24px;
+}
+
+.brand{
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-.8px;
+}
+
+.sub{
+  margin-top:6px;
+  color:#8b919d;
+  font-size:12px;
+}
+
+.card{
+  margin-top:22px;
+  background:#121419;
+  border:1px solid #292d36;
+  border-radius:20px;
+  padding:22px;
+}
+
+.voice{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  border:1px solid #292d36;
+  background:#191c22;
+  color:#f5f6f8;
+  font-size:34px;
+  display:block;
+  margin:18px auto;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.voice:hover{
+  transform:scale(1.04);
+}
+
+.voice.listening{
+  background:#f4f5f7;
+  color:#090a0d;
+}
+
+.status{
+  text-align:center;
+  color:#8b919d;
+  font-size:12px;
+  min-height:18px;
+}
+
+.transcript{
+  margin-top:18px;
+  padding:14px;
+  background:#191c22;
+  border:1px solid #292d36;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+  min-height:48px;
+  word-break:break-word;
+}
+
+.result{
+  margin-top:10px;
+  padding:14px;
+  border-radius:12px;
+  background:#191c22;
+  border:1px solid #292d36;
+  font-size:12px;
+  line-height:1.5;
+  display:none;
+}
+
+.result.show{
+  display:block;
+}
+
+.result.success{
+  color:#74d69b;
+}
+
+.result.error{
+  color:#ff7777;
+}
+
+.examples{
+  margin-top:18px;
+  color:#8b919d;
+  font-size:11px;
+  line-height:1.7;
+}
+
+.examples b{
+  color:#f5f6f8;
+}
+
+.footer{
+  text-align:center;
+  color:#555b66;
+  font-size:10px;
+  margin-top:18px;
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
-<aside class="sidebar"><div class="brand">Creative OS</div><div class="brand-sub">Personal Creative System</div><nav class="nav"><button class="active" data-page="dashboard" onclick="showPage('dashboard',this)">Overview</button><button data-page="tasks" onclick="showPage('tasks',this)">Tasks</button><button data-page="revisions" onclick="showPage('revisions',this)">Revisions</button><button data-page="inspiration" onclick="showPage('inspiration',this)">Inspiration</button><button data-page="reminders" onclick="showPage('reminders',this)">Reminders</button></nav><div class="connection"><span id="connectionDot" class="dot"></span><span id="connectionText">Connecting...</span></div></aside>
-<main class="main">
-<section id="dashboard" class="page active"><div class="topbar"><div><div class="eyebrow">Creative command center</div><h1>Overview</h1><div class="date" id="today"></div></div><div class="voice-wrap"><button class="button voice-button" onclick="toggleVoice()">🎙 Voice</button><div class="voice-status" id="voiceStatus">Tap to speak</div></div></div>
-<div class="stats"><div class="card"><div class="stat-label">Total Tasks</div><div class="stat-value" id="stat-total">0</div><div class="stat-note">Active + completed</div></div><div class="card"><div class="stat-label">Active</div><div class="stat-value" id="stat-active">0</div><div class="stat-note">Not completed</div></div><div class="card"><div class="stat-label">Due Today</div><div class="stat-value" id="stat-due">0</div><div class="stat-note">Needs attention today</div></div><div class="card"><div class="stat-label">Pending Revisions</div><div class="stat-value" id="stat-revisions">0</div><div class="stat-note">Feedback still open</div></div></div>
-<div class="section section-gap"><div class="section-head"><div class="section-title">Quick Actions</div></div><div class="quick-actions"><button class="quick-action" onclick="openModal('task')"><div class="quick-icon">＋</div><div class="quick-title">New Task</div><div class="quick-sub">Frameboxx or Job</div></button><button class="quick-action" onclick="openModal('reminder')"><div class="quick-icon">🔔</div><div class="quick-title">New Reminder</div><div class="quick-sub">Sync to Calendar</div></button><button class="quick-action" onclick="openRevisionModal()"><div class="quick-icon">↻</div><div class="quick-title">Add Revision</div><div class="quick-sub">Log feedback</div></button><button class="quick-action" onclick="openModal('inspiration')"><div class="quick-icon">💡</div><div class="quick-title">Inspiration</div><div class="quick-sub">Save reference</div></button></div></div>
-<div class="dashboard-grid section-gap"><div class="section"><div class="section-head"><div class="section-title">Recent Tasks</div><button class="secondary" onclick="showPage('tasks',document.querySelector('[data-page=tasks]'))">View all</button></div><div id="recentTasks" class="list"><div class="empty">Loading...</div></div></div><div class="section"><div class="section-head"><div class="section-title">Upcoming Reminders</div><button class="secondary" onclick="showPage('reminders',document.querySelector('[data-page=reminders]'))">View all</button></div><div id="dashReminders" class="list"><div class="empty">Loading...</div></div></div></div>
-<div class="section section-gap"><div class="section-head"><div class="section-title">Revision Watch</div><button class="secondary" onclick="showPage('revisions',document.querySelector('[data-page=revisions]'))">View all</button></div><div id="revisionWatch" class="list"><div class="empty">Loading...</div></div></div>
-</section>
-<section id="tasks" class="page"><div class="topbar"><div><div class="eyebrow">Work management</div><h1>Tasks</h1><div class="date">Everything you're currently working on.</div></div><div class="voice-wrap"><button class="button voice-button" onclick="toggleVoice()">🎙 Voice</button></div></div><div class="section"><div class="section-head"><div class="section-title">All Tasks</div><div class="toolbar"><button class="filter active" onclick="filterTasks('all',this)">All</button><button class="filter" onclick="filterTasks('active',this)">Active</button><button class="filter" onclick="filterTasks('completed',this)">Completed</button><button class="primary" onclick="openModal('task')">＋ New Task</button></div></div><div id="tasksList" class="list"><div class="empty">Loading...</div></div></div></section>
-<section id="revisions" class="page"><div class="topbar"><div><div class="eyebrow">Feedback loop</div><h1>Revisions</h1><div class="date">Track changes and client feedback.</div></div><button class="primary" onclick="openRevisionModal()">＋ Add Revision</button></div><div class="section"><div class="section-head"><div class="section-title">Revision History</div></div><div id="revisionsList" class="list"><div class="empty">Loading...</div></div></div></section>
-<section id="inspiration" class="page"><div class="topbar"><div><div class="eyebrow">Creative fuel</div><h1>Inspiration</h1><div class="date">Ideas, references and things worth stealing legally.</div></div><button class="primary" onclick="openModal('inspiration')">＋ Inspiration</button></div><div class="section"><div id="inspirationList" class="list"><div class="empty">Loading...</div></div></div></section>
-<section id="reminders" class="page"><div class="topbar"><div><div class="eyebrow">Don't forget</div><h1>Reminders</h1><div class="date">Calendar-connected reminders.</div></div><button class="primary" onclick="openModal('reminder')">＋ New Reminder</button></div><div class="section"><div id="remindersList" class="list"><div class="empty">Loading...</div></div></div></section>
-</main></div>
-<div class="mobile-nav"><button class="active" data-page="dashboard" onclick="showPage('dashboard',this)">⌂<br>Home</button><button data-page="tasks" onclick="showPage('tasks',this)">✓<br>Tasks</button><button data-page="revisions" onclick="showPage('revisions',this)">↻<br>Revisions</button><button data-page="inspiration" onclick="showPage('inspiration',this)">💡<br>Ideas</button><button data-page="reminders" onclick="showPage('reminders',this)">🔔<br>Reminders</button></div>
-<div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><div class="modal-head"><div id="modalTitle" class="modal-title">New Task</div><button class="close" onclick="closeModal()">×</button></div>
-<form id="taskForm" onsubmit="saveTask(event)"><div class="form-grid"><div class="field"><label>Type</label><select id="taskType"><option>Frameboxx</option><option>Job</option></select></div><div class="field"><label>Course / Job</label><input id="taskCourse" placeholder="e.g. Illustrator, Gbazar"></div><div class="field"><label>Project</label><input id="taskProject"></div><div class="field"><label>Task</label><input id="taskName" required></div><div class="field"><label>Received</label><input id="taskReceived" type="date"></div><div class="field"><label>Deadline</label><input id="taskDeadline" type="date"></div><div class="field"><label>Status</label><select id="taskStatus"><option>To Do</option><option>In Progress</option><option>Waiting</option><option>Completed</option></select></div><div class="field"><label>Priority</label><select id="taskPriority"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select></div><div class="field full"><label>Notes</label><textarea id="taskNotes"></textarea></div><div class="field full"><label>Existing File / Drive Link</label><input id="taskFileLink" type="url" placeholder="Optional"></div></div><div class="form-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save Task</button></div></form>
-<form id="reminderForm" style="display:none" onsubmit="saveReminder(event)"><div class="form-grid"><div class="field full"><label>Reminder</label><input id="reminderText" required></div><div class="field"><label>Type</label><select id="reminderType"><option>Research</option><option>Idea</option><option>Learn</option><option>Explore</option><option>Follow Up</option><option>Personal</option></select></div><div class="field"><label>Repeat</label><select id="reminderRepeat"><option>None</option><option>Daily</option><option>Weekly</option><option>Monthly</option></select></div><div class="field"><label>Date & Time</label><input id="reminderDateTime" type="datetime-local" required></div><div class="field"><label>Status</label><select id="reminderStatus"><option>To Do</option><option>In Progress</option><option>Completed</option></select></div><div class="field full"><label>Notes</label><textarea id="reminderNotes"></textarea></div></div><div class="form-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save Reminder</button></div></form>
-<form id="revisionForm" style="display:none" onsubmit="saveRevision(event)"><div class="form-grid"><div class="field full"><label>Task</label><select id="revisionTask" required></select></div><div class="field"><label>Revision Number</label><input value="Automatic" disabled></div><div class="field"><label>Date</label><input id="revisionDate" type="date"></div><div class="field full"><label>Reason / Feedback</label><textarea id="revisionReason" required></textarea></div><div class="field"><label>Status</label><select id="revisionStatus"><option>Pending</option><option>In Progress</option><option>Approved</option></select></div><div class="field"><label>File / Drive Link</label><input id="revisionFile" type="url"></div><div class="field full"><label>Notes</label><textarea id="revisionNotes"></textarea></div></div><div class="form-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save Revision</button></div></form>
-<form id="inspirationForm" style="display:none" onsubmit="saveInspiration(event)"><div class="form-grid"><div class="field"><label>Date</label><input id="inspDate" type="date"></div><div class="field"><label>Category</label><select id="inspCategory"><option>Design</option><option>Motion</option><option>Typography</option><option>Branding</option><option>3D</option><option>UI/UX</option><option>Photography</option><option>Illustration</option></select></div><div class="field full"><label>Title</label><input id="inspTitle" required></div><div class="field full"><label>Note</label><textarea id="inspNote"></textarea></div><div class="field"><label>Source</label><input id="inspSource" placeholder="Behance, Pinterest, Instagram..."></div><div class="field"><label>File</label><input id="inspFile" type="url" placeholder="Drive/file link"></div><div class="field full"><label>Link</label><input id="inspLink" type="url" placeholder="Reference URL"></div></div><div class="form-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save Inspiration</button></div></form>
-</div></div><div id="toast" class="toast"></div>
+
+  <div class="brand">Creative OS</div>
+  <div class="sub">Voice remote</div>
+
+  <div class="card">
+
+    <button
+      id="voiceBtn"
+      class="voice"
+      onclick="toggleVoice()"
+      aria-label="Voice command">
+      🎙️
+    </button>
+
+    <div id="status" class="status">
+      Tap the mic and speak
+    </div>
+
+    <div id="transcript" class="transcript">
+      Your command will appear here.
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <div class="examples">
+      <b>Try:</b><br>
+      Add a task called poster design<br>
+      Add a job task called Gbazar packaging, urgent, deadline 12 September<br>
+      Remind me tomorrow at 10 AM to export the video<br>
+      Complete task 001
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Creative OS • Google Apps Script voice bridge
+  </div>
+
+</div>
+
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbzVjQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
-let dashboardData=null,allTasks=[],allRevisions=[],allInspirations=[],allReminders=[],recognition=null,listening=false;
-const $=id=>document.getElementById(id);
-const todayValue=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
-const dateText=v=>{if(!v)return"";const d=new Date(v);return isNaN(d)?String(v):d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})};
-const dateTimeText=v=>{if(!v)return"";const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString("en-IN",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})};
-const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-const safeUrl=v=>/^https?:\/\//i.test(String(v||""))?String(v):"";
-function toast(msg){$("toast").textContent=msg;$("toast").style.display="block";clearTimeout(window.__toast);window.__toast=setTimeout(()=>$("toast").style.display="none",2400)}
-function cacheSet(k,v){try{localStorage.setItem("creativeOS_"+k,JSON.stringify({t:Date.now(),v}))}catch(e){}}
-function cacheGet(k){try{const x=JSON.parse(localStorage.getItem("creativeOS_"+k)||"null");return x?x.v:null}catch(e){return null}}
-function cacheClear(){["dashboard","tasks","revisions","inspiration","reminders"].forEach(k=>localStorage.removeItem("creativeOS_"+k))}
-function setConnection(ok){$("connectionDot").classList.toggle("online",ok);$("connectionText").textContent=ok?"Connected":"Connection failed"}
-function jsonp(params,timeout=20000){return new Promise((resolve,reject)=>{const cb="creativeOS_"+Date.now()+"_"+Math.floor(Math.random()*9999),script=document.createElement("script"),p=new URLSearchParams(params);p.set("callback",cb);p.set("_",Date.now());let done=false;const finish=(fn,val)=>{if(done)return;done=true;clearTimeout(timer);script.remove();try{delete window[cb]}catch(e){}fn(val)};window[cb]=data=>{if(data&&data.success===false)return finish(reject,new Error(data.message||"Backend error"));finish(resolve,data)};script.onerror=()=>finish(reject,new Error("Could not connect to Creative OS."));const timer=setTimeout(()=>finish(reject,new Error("Creative OS backend timed out.")),timeout);script.src=API_URL+"?"+p.toString();document.body.appendChild(script)})}
-function api(action,extra={}){return jsonp(Object.assign({api:"1",action},extra))}
-function loadDashboard(force=false){const cached=cacheGet("dashboard");if(cached)renderDashboard(cached);if(!force&&cached)return api("dashboard").then(d=>{dashboardData=d;cacheSet("dashboard",d);renderDashboard(d);setConnection(true)}).catch(e=>setConnection(false));return api("dashboard").then(d=>{dashboardData=d;cacheSet("dashboard",d);renderDashboard(d);setConnection(true)}).catch(e=>{setConnection(false);toast(e.message)})}
-function renderDashboard(d){const m=d?.metrics||{};$("stat-total").textContent=m.totalTasks??0;$("stat-active").textContent=m.activeTasks??0;$("stat-due").textContent=m.dueToday??0;$("stat-revisions").textContent=m.pendingRevisions??0;renderTaskRows($("recentTasks"),d.recentTasks||[]);renderReminderRows($("dashReminders"),d.reminders||[]);renderRevisionRows($("revisionWatch"),d.revisionWatch||[])}
-function loadTasks(force=false){const cached=cacheGet("tasks");if(cached){allTasks=cached;renderTasks(allTasks);fillTaskSelect()}return api("tasks").then(d=>{allTasks=d.tasks||[];cacheSet("tasks",allTasks);renderTasks(allTasks);fillTaskSelect();setConnection(true)}).catch(e=>{if(!cached)$("tasksList").innerHTML='<div class="empty">Unable to load tasks.</div>';toast(e.message)})}
-function renderTasks(items){renderTaskRows($("tasksList"),items)}
-function renderTaskRows(container,items){if(!items?.length){container.innerHTML='<div class="empty">No tasks found.</div>';return}container.innerHTML=items.map(t=>{const status=t.status||"To Do",priority=t.priority||"",link=safeUrl(t.fileLink),id=esc(t.id),drive=link?`<a class="button" href="${esc(link)}" target="_blank">📁 Open Drive</a>`:`<button class="button" onclick="openDriveFolder('${id}')">📁 Create / Open Drive</button>`;return `<div class="row"><div class="row-head"><div><div class="row-title">${esc(t.task||"Untitled")}</div><div class="row-meta">${esc(t.type||"")}${t.courseJob?" · "+esc(t.courseJob):""}${t.project?" · "+esc(t.project):""} · ${id}</div></div><span class="badge ${status==='Completed'?'completed':status==='In Progress'?'progress':''}">${esc(status)}</span></div><div class="badges"><span class="badge ${priority.toLowerCase()}">${esc(priority)}</span>${t.deadline?`<span class="badge">Due ${dateText(t.deadline)}</span>`:""}<span class="badge">${esc(t.daysActive||0)} days active</span>${Number(t.revisionCount)?`<span class="badge">${esc(t.revisionCount)} revision${Number(t.revisionCount)===1?'':'s'}</span>`:""}</div>${t.notes?`<div class="detail">${esc(t.notes)}</div>`:""}<div class="drive-row">${drive}<button class="button" onclick="uploadForTask('${id}')">＋ Upload File</button><button class="button" onclick="openRevisionModal('${id}')">＋ Revision</button><button class="button" onclick="historyForTask('${id}')">History</button>${status!=="Completed"?`<button class="primary" onclick="completeTaskUI('${id}')">✓ Complete</button>`:""}</div><div id="files-${id}" class="file-list"><div class="muted">Files load when requested.</div></div></div>`}).join("")}
-function renderReminderRows(container,items){if(!items?.length){container.innerHTML='<div class="empty">No upcoming reminders.</div>';return}container.innerHTML=items.map(r=>`<div class="row"><div class="row-head"><div><div class="row-title">${esc(r.reminder)}</div><div class="row-meta">${esc(dateTimeText(r.remindOn))}</div></div><span class="badge">${esc(r.type||"Personal")}</span></div>${r.repeat&&r.repeat!=="None"?`<div class="detail">Repeat: ${esc(r.repeat)}</div>`:""}</div>`).join("")}
-function renderRevisionRows(container,items){if(!items?.length){container.innerHTML='<div class="empty">No pending revisions.</div>';return}container.innerHTML=items.map(r=>`<div class="row"><div class="row-head"><div><div class="row-title">${esc(r.taskId)} · Revision ${esc(r.revisionNumber)}</div><div class="row-meta">${esc(dateText(r.date))}</div></div><span class="badge">${esc(r.status)}</span></div><div class="detail">${esc(r.reason||"No feedback entered")}</div></div>`).join("")}
-function loadRevisions(){const c=cacheGet("revisions");if(c){allRevisions=c;renderRevisionRows($("revisionsList"),c)}return api("revisions").then(d=>{allRevisions=d.revisions||[];cacheSet("revisions",allRevisions);renderRevisionRows($("revisionsList"),allRevisions)}).catch(e=>{if(!c)$("revisionsList").innerHTML='<div class="empty">Unable to load revisions.</div>';toast(e.message)})}
-function loadInspirations(){const c=cacheGet("inspiration");if(c){allInspirations=c;renderInspirations(c)}return api("inspiration").then(d=>{allInspirations=d.inspirations||[];cacheSet("inspiration",allInspirations);renderInspirations(allInspirations)}).catch(e=>{if(!c)$("inspirationList").innerHTML='<div class="empty">Unable to load inspiration.</div>';toast(e.message)})}
-function renderInspirations(xs){if(!xs?.length){$("inspirationList").innerHTML='<div class="empty">No inspirations saved yet.</div>';return}$("inspirationList").innerHTML=xs.map(x=>`<div class="row"><div class="row-title">${esc(x.title)}</div><div class="row-meta">${esc(dateText(x.date))} · ${esc(x.category||"")}</div>${x.note?`<div class="detail">${esc(x.note)}</div>`:""}${x.source?`<div class="detail">Source: ${esc(x.source)}</div>`:""}${safeUrl(x.link||x.file)?`<div class="drive-row"><a class="button" href="${esc(safeUrl(x.link||x.file))}" target="_blank">Open Reference</a></div>`:""}</div>`).join("")}
-function loadReminders(){const c=cacheGet("reminders");if(c){allReminders=c;renderReminderList(c)}return api("reminders").then(d=>{allReminders=d.reminders||[];cacheSet("reminders",allReminders);renderReminderList(allReminders)}).catch(e=>{if(!c)$("remindersList").innerHTML='<div class="empty">Unable to load reminders.</div>';toast(e.message)})}
-function renderReminderList(rs){if(!rs?.length){$("remindersList").innerHTML='<div class="empty">No reminders yet.</div>';return}$("remindersList").innerHTML=rs.map(r=>`<div class="row"><div class="row-head"><div><div class="row-title">${esc(r.reminder)}</div><div class="row-meta">${esc(dateTimeText(r.remindOn))}</div></div><span class="badge ${r.status==='Completed'?'completed':''}">${esc(r.status)}</span></div><div class="badges"><span class="badge">${esc(r.type||"Personal")}</span><span class="badge">${esc(r.repeat||"None")}</span>${r.calendarEventId?'<span class="badge">📅 Calendar connected</span>':''}</div>${r.notes?`<div class="detail">${esc(r.notes)}</div>`:""}${r.status!=="Completed"?`<div class="actions"><button class="primary" onclick="completeReminderUI('${esc(r.id)}')">✓ Complete</button></div>`:""}</div>`).join("")}
-function showPage(page,button){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(page).classList.add('active');document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo(0,0);if(page==='dashboard')loadDashboard();if(page==='tasks')loadTasks();if(page==='revisions')loadRevisions();if(page==='inspiration')loadInspirations();if(page==='reminders')loadReminders()}
-function filterTasks(type,btn){document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTasks(type==='all'?allTasks:allTasks.filter(t=>type==='completed'?t.status==='Completed':t.status!=='Completed'))}
-function openModal(type){document.querySelectorAll('#modal form').forEach(f=>f.style.display='none');const form=$(type+'Form');if(!form)return;form.style.display='block';$("modalTitle").textContent=type==='task'?'New Task':type==='reminder'?'New Reminder':type==='revision'?'Add Revision':'New Inspiration';setDefaults();$("modal").classList.add('open');if(type==='revision')fillTaskSelect()}
-function closeModal(){$("modal").classList.remove('open')}
-function setDefaults(){$("taskReceived").value ||= todayValue();$("revisionDate").value ||= todayValue();$("inspDate").value ||= todayValue();if(!$('reminderDateTime').value){const d=new Date(Date.now()+3600000);d.setMinutes(Math.ceil(d.getMinutes()/5)*5,0,0);$('reminderDateTime').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16)}}
-function fillTaskSelect(){if(!allTasks.length){$('revisionTask').innerHTML='<option value="">Load tasks first</option>';return}$('revisionTask').innerHTML=allTasks.map(t=>`<option value="${esc(t.id)}">${esc(t.id)} · ${esc(t.task)}</option>`).join("")}
-function openRevisionModal(taskId=""){openModal('revision');if(taskId)setTimeout(()=>{$('revisionTask').value=taskId},0)}
-async function saveTask(e){e.preventDefault();const b=e.submitter;b.disabled=true;try{const d={type:$('taskType').value,courseJob:$('taskCourse').value.trim(),project:$('taskProject').value.trim(),task:$('taskName').value.trim(),received:$('taskReceived').value,deadline:$('taskDeadline').value,status:$('taskStatus').value,priority:$('taskPriority').value,notes:$('taskNotes').value.trim(),fileLink:$('taskFileLink').value.trim()};const r=await api('createTask',{data:JSON.stringify(d)});toast('Task '+r.taskId+' created'+(r.drive?.success?' + Drive folder created':''));closeModal();resetForm('taskForm');cacheClear();loadDashboard(true);if($('tasks').classList.contains('active'))loadTasks(true)}catch(err){toast(err.message)}finally{b.disabled=false}}
-async function saveReminder(e){e.preventDefault();const b=e.submitter;b.disabled=true;try{const d={reminder:$('reminderText').value.trim(),type:$('reminderType').value,remindOn:$('reminderDateTime').value,status:$('reminderStatus').value,repeat:$('reminderRepeat').value,notes:$('reminderNotes').value.trim()};const r=await api('createReminder',{data:JSON.stringify(d)});toast(r.calendarEventId?'Reminder + Calendar saved':'Reminder saved');closeModal();resetForm('reminderForm');cacheClear();loadDashboard(true);if($('reminders').classList.contains('active'))loadReminders()}catch(err){toast(err.message)}finally{b.disabled=false}}
-async function saveRevision(e){e.preventDefault();const b=e.submitter;b.disabled=true;try{const d={taskId:$('revisionTask').value,date:$('revisionDate').value,reason:$('revisionReason').value.trim(),status:$('revisionStatus').value,fileLink:$('revisionFile').value.trim(),notes:$('revisionNotes').value.trim()};const r=await api('addRevision',{data:JSON.stringify(d)});toast('Revision '+r.revisionNumber+' saved');closeModal();resetForm('revisionForm');cacheClear();loadDashboard(true);if($('revisions').classList.contains('active'))loadRevisions()}catch(err){toast(err.message)}finally{b.disabled=false}}
-async function saveInspiration(e){e.preventDefault();const b=e.submitter;b.disabled=true;try{const d={date:$('inspDate').value,title:$('inspTitle').value.trim(),category:$('inspCategory').value,note:$('inspNote').value.trim(),source:$('inspSource').value.trim(),file:$('inspFile').value.trim(),link:$('inspLink').value.trim()};await api('createInspiration',{data:JSON.stringify(d)});toast('Inspiration saved');closeModal();resetForm('inspirationForm');cacheClear();if($('inspiration').classList.contains('active'))loadInspirations();loadDashboard(true)}catch(err){toast(err.message)}finally{b.disabled=false}}
-function resetForm(id){const f=$(id);if(!f)return;f.reset();setDefaults()}
-async function completeTaskUI(id){if(!confirm('Mark this task as completed?'))return;try{await api('completeTask',{taskId:id});toast('Task completed');cacheClear();loadDashboard(true);loadTasks(true)}catch(e){toast(e.message)}}
-async function completeReminderUI(id){try{await api('completeReminder',{reminderId:id});toast('Reminder completed');cacheClear();loadDashboard(true);loadReminders()}catch(e){toast(e.message)}}
-async function openDriveFolder(id){try{const r=await api('getTaskDriveFolder',{taskId:id});if(r.folderUrl)window.open(r.folderUrl,'_blank');cacheClear();loadTasks(true)}catch(e){toast(e.message)}}
-async function historyForTask(id){try{const d=await api('revisions',{taskId:id});if(!d.revisions?.length){alert('No revision history.');return}alert(d.revisions.map(r=>`Revision ${r.revisionNumber} | ${dateText(r.date)} | ${r.status}\n${r.reason||'No reason'}`).join('\n\n'))}catch(e){toast(e.message)}}
-function fileIcon(mime,name){const n=String(name||'').toLowerCase();if(mime==='application/pdf'||n.endsWith('.pdf'))return'📄';if(mime?.startsWith('image/'))return'🖼️';if(/\.(ai|eps|svg)$/.test(n))return'🎨';if(/\.(psd|aep|prproj)$/.test(n))return'🎬';if(n.endsWith('.zip'))return'🗜️';if(mime?.startsWith('video/'))return'🎬';return'📎'}
-async function loadTaskFiles(id){const box=$('files-'+id);if(box)box.innerHTML='<div class="muted">Loading files...</div>';try{const d=await api('getTaskFiles',{taskId:id});if(!box)return;if(!d.files?.length){box.innerHTML='<div class="muted">No files uploaded yet.</div>';return}box.innerHTML='<div class="muted">FILES · '+d.files.length+'</div>'+d.files.map(f=>`<div class="file-row"><span>${fileIcon(f.mimeType,f.name)}</span><a href="${esc(f.url)}" target="_blank">${esc(f.name)}</a></div>`).join('')}catch(e){if(box)box.innerHTML='<div class="muted">Could not load files.</div>';toast(e.message)}}
-function uploadForTask(id){const input=document.createElement('input');input.type='file';input.multiple=true;input.accept='image/*,.pdf,.ai,.psd,.eps,.svg,.zip,.mp4,.mov,.aep,.prproj';input.onchange=()=>{const files=[...input.files];if(!files.length)return;uploadFiles(id,files)};input.click()}
-async function uploadFiles(taskId,files){for(const file of files){if(file.size>20*1024*1024){toast(file.name+' is over 20 MB');continue}toast('Uploading '+file.name+'...');try{await postUpload(taskId,file);toast(file.name+' uploaded to Drive')}catch(e){toast(file.name+': '+e.message)}}loadTaskFiles(taskId)}
-function postUpload(taskId,file){return new Promise((resolve,reject)=>{const iframe=document.createElement('iframe'),name='upload_'+Date.now()+'_'+Math.random().toString(36).slice(2);iframe.name=name;iframe.style.display='none';document.body.appendChild(iframe);const form=document.createElement('form');form.method='POST';form.action=API_URL;form.target=name;form.style.display='none';const fields={action:'uploadTaskFile',taskId,fileName:file.name,mimeType:file.type||'application/octet-stream',callbackId:name};for(const [k,v] of Object.entries(fields)){const i=document.createElement('input');i.name=k;i.value=v;form.appendChild(i)}const reader=new FileReader();reader.onload=()=>{const i=document.createElement('input');i.name='base64Data';i.value=String(reader.result).split(',')[1]||'';form.appendChild(i);document.body.appendChild(form);window.addEventListener('message',function handler(ev){if(ev.data?.callbackId!==name)return;window.removeEventListener('message',handler);form.remove();iframe.remove();ev.data.success?resolve(ev.data):reject(new Error(ev.data.message||'Upload failed'))},{once:true});form.submit()};reader.onerror=()=>{form.remove();iframe.remove();reject(new Error('Could not read file'))};reader.readAsDataURL(file)})}
-function setupVoice(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.querySelectorAll('.voice-status').forEach(x=>x.textContent='Voice unavailable');return}recognition=new SR();recognition.lang='en-IN';recognition.continuous=false;recognition.interimResults=true;recognition.onstart=()=>{listening=true;document.querySelectorAll('.voice-button').forEach(x=>x.classList.add('listening'));document.querySelectorAll('.voice-status').forEach(x=>x.textContent='Listening...')};recognition.onresult=e=>{let t='';for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;if(e.results[e.results.length-1].isFinal)sendVoiceCommand(t);else document.querySelectorAll('.voice-status').forEach(x=>x.textContent=t||'Listening...')};recognition.onerror=e=>{listening=false;document.querySelectorAll('.voice-button').forEach(x=>x.classList.remove('listening'));document.querySelectorAll('.voice-status').forEach(x=>x.textContent='Voice error')};recognition.onend=()=>{listening=false;document.querySelectorAll('.voice-button').forEach(x=>x.classList.remove('listening'))}}
-function toggleVoice(){if(!recognition)setupVoice();if(!recognition)return;if(listening){recognition.stop();return}try{recognition.start()}catch(e){}}
-async function sendVoiceCommand(command){document.querySelectorAll('.voice-status').forEach(x=>x.textContent='Sending...');try{const r=await jsonp({voice:'1',command,text:command,transcript:command,source:'creative-os-voice'},20000);toast(r.message||'Command completed');document.querySelectorAll('.voice-status').forEach(x=>x.textContent='Command completed');cacheClear();loadDashboard(true)}catch(e){document.querySelectorAll('.voice-status').forEach(x=>x.textContent='Command failed');toast(e.message)}}
-function init(){const d=new Date();$('today').textContent=d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});setDefaults();const c=cacheGet('dashboard');if(c)renderDashboard(c);loadDashboard();setupVoice()}
-init();
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzVJQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
+
+let recognition = null;
+let listening = false;
+let finalText = "";
+
+const $ = id => document.getElementById(id);
+
+function setStatus(text){
+  $("status").textContent = text;
+}
+
+function showResult(message, success){
+  const box = $("result");
+
+  box.textContent = message || "Command completed.";
+
+  box.className =
+    "result show " +
+    (success ? "success" : "error");
+}
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+
+  try{
+    window.speechSynthesis.cancel();
+
+    const utterance =
+      new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "en-IN";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    window.speechSynthesis.speak(utterance);
+  }catch(e){}
+}
+
+function setupVoice(){
+
+  const SR =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SR){
+
+    setStatus(
+      "Voice input is not supported in this browser"
+    );
+
+    $("voiceBtn").disabled = true;
+    $("voiceBtn").style.opacity = ".4";
+
+    return;
+  }
+
+  recognition = new SR();
+
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = function(){
+
+    listening = true;
+    finalText = "";
+
+    $("voiceBtn").classList.add("listening");
+    $("voiceBtn").textContent = "⏹";
+
+    setStatus("Listening...");
+
+    $("transcript").textContent = "";
+    $("result").className = "result";
+  };
+
+  recognition.onresult = function(event){
+
+    let text = "";
+
+    for(
+      let i = event.resultIndex;
+      i < event.results.length;
+      i++
+    ){
+      text += event.results[i][0].transcript;
+    }
+
+    text = text.trim();
+
+    $("transcript").textContent =
+      text || "Listening...";
+
+    const last =
+      event.results[event.results.length - 1];
+
+    if(last && last.isFinal){
+
+      finalText = text;
+
+      if(finalText){
+        sendVoiceCommand(finalText);
+      }
+    }
+  };
+
+  recognition.onerror = function(event){
+
+    listening = false;
+
+    $("voiceBtn").classList.remove("listening");
+    $("voiceBtn").textContent = "🎙️";
+
+    const messages = {
+      "not-allowed":
+        "Microphone permission was blocked.",
+      "service-not-allowed":
+        "Speech service is unavailable.",
+      "no-speech":
+        "No speech detected.",
+      "audio-capture":
+        "No microphone was detected."
+    };
+
+    setStatus(
+      messages[event.error] ||
+      "Voice input error."
+    );
+  };
+
+  recognition.onend = function(){
+
+    listening = false;
+
+    $("voiceBtn").classList.remove("listening");
+    $("voiceBtn").textContent = "🎙️";
+
+    if(!finalText){
+      setStatus("Tap the mic and speak");
+    }
+  };
+}
+
+function toggleVoice(){
+
+  if(!recognition){
+    setupVoice();
+  }
+
+  if(!recognition) return;
+
+  if(listening){
+    recognition.stop();
+    return;
+  }
+
+  finalText = "";
+
+  try{
+    recognition.start();
+  }catch(e){
+    setStatus("Tap the mic again");
+  }
+}
+
+function sendVoiceCommand(command){
+
+  setStatus("Sending command...");
+
+  const callbackName =
+    "creativeOSVoice_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random()*10000);
+
+  let finished = false;
+
+  const script =
+    document.createElement("script");
+
+  function cleanup(){
+
+    if(script.parentNode){
+      script.parentNode.removeChild(script);
+    }
+
+    try{
+      delete window[callbackName];
+    }catch(e){
+      window[callbackName] = undefined;
+    }
+  }
+
+  window[callbackName] = function(data){
+
+    if(finished) return;
+
+    finished = true;
+
+    cleanup();
+
+    if(data && data.success){
+
+      const message =
+        data.message ||
+        "Command completed.";
+
+      setStatus("Done");
+
+      showResult(message, true);
+
+      speak(message);
+
+    }else{
+
+      const message =
+        data && data.message
+          ? data.message
+          : "The command could not be completed.";
+
+      setStatus("Command failed");
+
+      showResult(message, false);
+
+      speak(message);
+    }
+  };
+
+  script.onerror = function(){
+
+    if(finished) return;
+
+    finished = true;
+
+    cleanup();
+
+    setStatus("Connection failed");
+
+    showResult(
+      "Creative OS could not be reached.",
+      false
+    );
+  };
+
+  const url =
+    API_URL +
+    "?voice=1" +
+    "&command=" +
+    encodeURIComponent(command) +
+    "&callback=" +
+    encodeURIComponent(callbackName);
+
+  script.src = url;
+
+  document.body.appendChild(script);
+
+  setTimeout(function(){
+
+    if(finished) return;
+
+    finished = true;
+
+    cleanup();
+
+    setStatus("No response");
+
+    showResult(
+      "Creative OS did not respond in time.",
+      false
+    );
+
+  }, 25000);
+}
+
+setupVoice();
+
 </script>
-</body></html>
+
+</body>
+</html>
