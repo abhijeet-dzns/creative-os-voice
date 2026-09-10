@@ -146,6 +146,31 @@
     .error {
       color: #ff8f8f;
     }
+
+    .success {
+      color: #a8f0c6;
+    }
+
+    .connection {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 18px;
+      color: #7e8999;
+      font-size: 11px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #6b7280;
+    }
+
+    .dot.online {
+      background: #58d68d;
+      box-shadow: 0 0 10px rgba(88,214,141,.45);
+    }
   </style>
 </head>
 <body>
@@ -167,15 +192,112 @@
       <div id="transcript">Nothing yet.</div>
     </div>
 
+    <div class="connection" id="connection">
+      <span class="dot" id="connectionDot"></span>
+      <span id="connectionText">Connecting to Creative OS...</span>
+    </div>
+
     <div class="note">
-      Voice connection to Creative OS will be added after this page is live.
+      Voice commands are sent securely to your Creative OS Apps Script backend.
     </div>
   </main>
 
   <script>
+    const CREATIVE_OS_URL = "https://script.google.com/macros/s/AKfycbzVjQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
+
     const micButton = document.getElementById("micButton");
     const statusEl = document.getElementById("status");
     const transcriptEl = document.getElementById("transcript");
+    const connectionDot = document.getElementById("connectionDot");
+    const connectionText = document.getElementById("connectionText");
+
+    let callbackCounter = 0;
+
+    function setConnection(online) {
+      connectionDot.classList.toggle("online", online);
+      connectionText.textContent = online
+        ? "Creative OS connected"
+        : "Creative OS connection unavailable";
+    }
+
+    function callCreativeOS(command) {
+      return new Promise((resolve, reject) => {
+        const callbackName = "voiceCallback_" + Date.now() + "_" + (++callbackCounter);
+        const script = document.createElement("script");
+        let finished = false;
+
+        window[callbackName] = (result) => {
+          if (finished) return;
+          finished = true;
+          cleanup();
+          resolve(result);
+        };
+
+        function cleanup() {
+          try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+          script.remove();
+        }
+
+        script.onerror = () => {
+          if (finished) return;
+          finished = true;
+          cleanup();
+          reject(new Error("Could not reach Creative OS."));
+        };
+
+        const url =
+          CREATIVE_OS_URL +
+          "?voice=1" +
+          "&callback=" + encodeURIComponent(callbackName) +
+          "&command=" + encodeURIComponent(command);
+
+        script.src = url;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function testConnection() {
+      try {
+        await callCreativeOS("connection test");
+        setConnection(true);
+      } catch (e) {
+        setConnection(false);
+      }
+    }
+
+    async function sendVoiceCommand(command) {
+      if (!command) return;
+
+      statusEl.classList.remove("error", "success");
+      statusEl.textContent = "Processing...";
+
+      try {
+        const result = await callCreativeOS(command);
+        setConnection(true);
+
+        if (result && result.success) {
+          statusEl.textContent = result.message || "Done.";
+          statusEl.classList.add("success");
+
+          if ("speechSynthesis" in window && result.message) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(result.message);
+            utterance.lang = "en-IN";
+            utterance.rate = 1;
+            window.speechSynthesis.speak(utterance);
+          }
+        } else {
+          statusEl.textContent = result && result.message
+            ? result.message
+            : "I couldn't process that command.";
+          statusEl.classList.add("error");
+        }
+      } catch (e) {
+        setConnection(false);
+        statusEl.textContent = "Could not connect to Creative OS.";
+        statusEl.classList.add("error");
+      }
+    }
 
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -193,15 +315,14 @@
       recognition.maxAlternatives = 1;
 
       micButton.addEventListener("click", () => {
+        statusEl.classList.remove("error", "success");
         transcriptEl.textContent = "Listening...";
         statusEl.textContent = "Listening...";
         micButton.classList.add("listening");
 
         try {
           recognition.start();
-        } catch (e) {
-          // Prevent duplicate-start errors from interrupting the UI.
-        }
+        } catch (e) {}
       });
 
       recognition.onresult = (event) => {
@@ -211,17 +332,25 @@
           text += event.results[i][0].transcript;
         }
 
-        transcriptEl.textContent = text.trim() || "Listening...";
+        const heard = text.trim();
+        transcriptEl.textContent = heard || "Listening...";
+
+        if (event.results[event.results.length - 1].isFinal && heard) {
+          sendVoiceCommand(heard);
+        }
       };
 
       recognition.onstart = () => {
+        statusEl.classList.remove("error", "success");
         statusEl.textContent = "Listening...";
         micButton.classList.add("listening");
       };
 
       recognition.onend = () => {
-        statusEl.textContent = "Ready";
         micButton.classList.remove("listening");
+        if (statusEl.textContent === "Listening...") {
+          statusEl.textContent = "Ready";
+        }
       };
 
       recognition.onerror = (event) => {
@@ -236,6 +365,8 @@
         statusEl.classList.add("error");
       };
     }
+
+    testConnection();
   </script>
 </body>
 </html>
