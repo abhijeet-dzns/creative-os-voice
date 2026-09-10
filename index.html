@@ -1876,27 +1876,44 @@ function renderDashboard(data) {
   state.dashboard = data;
 
   const d = data || {};
+  const metrics = d.metrics || {};
 
   const total =
-    d.totalTasks ??
-    d.total ??
-    (Array.isArray(d.tasks) ? d.tasks.length : 0);
+    metrics.totalTasks ?? 0;
 
   const active =
-    d.activeTasks ??
-    d.active ??
-    0;
+    metrics.activeTasks ?? 0;
 
   const due =
-    d.dueToday ??
-    d.due ??
-    0;
+    metrics.dueToday ?? 0;
 
   const revisions =
-    d.pendingRevisions ??
-    d.pendingRevisionCount ??
-    d.revisionsPending ??
-    0;
+    metrics.pendingRevisions ?? 0;
+
+  document.getElementById("stat-total").textContent =
+    total;
+
+  document.getElementById("stat-active").textContent =
+    active;
+
+  document.getElementById("stat-due").textContent =
+    due;
+
+  document.getElementById("stat-revisions").textContent =
+    revisions;
+
+  renderDashboardTasks(
+    d.recentTasks || []
+  );
+
+  renderDashboardReminders(
+    d.reminders || []
+  );
+
+  renderDashboardRevisions(
+    d.revisionWatch || []
+  );
+} 
 
   document.getElementById("stat-total").textContent =
     total;
