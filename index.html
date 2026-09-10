@@ -1,287 +1,1600 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creative OS Voice</title>
-<style>
-:root{
-  --bg:#07090d;
-  --card:#10141b;
-  --line:#202733;
-  --text:#f4f7fb;
-  --muted:#8993a8;
-  --accent:#8b5cf6;
-  --accent2:#6d4aff;
-  --good:#4ade80;
-  --bad:#ff6b6b;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  padding:24px;
-  background:
-    radial-gradient(circle at 50% 30%,rgba(109,74,255,.16),transparent 34%),
-    var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-.app{
-  width:min(100%,760px);
-  text-align:center;
-}
-.eyebrow{
-  font-size:12px;
-  letter-spacing:.22em;
-  color:#9b8cff;
-  margin-bottom:18px;
-}
-h1{
-  margin:0 0 12px;
-  font-size:34px;
-  line-height:1.1;
-}
-.sub{
-  margin:0 auto 38px;
-  color:var(--muted);
-  font-size:15px;
-}
-.mic{
-  width:118px;
-  height:118px;
-  border:0;
-  border-radius:50%;
-  background:linear-gradient(145deg,var(--accent),var(--accent2));
-  color:white;
-  font-size:46px;
-  cursor:pointer;
-  box-shadow:0 0 0 1px rgba(139,92,246,.35),0 0 0 12px rgba(139,92,246,.08),0 18px 55px rgba(109,74,255,.28);
-  transition:.18s ease;
-}
-.mic:hover{transform:translateY(-2px)}
-.mic:active{transform:scale(.97)}
-.mic.listening{
-  animation:pulse 1.15s infinite;
-}
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 1px rgba(139,92,246,.35),0 0 0 12px rgba(139,92,246,.08),0 18px 55px rgba(109,74,255,.28)}
-  50%{box-shadow:0 0 0 1px rgba(139,92,246,.5),0 0 0 24px rgba(139,92,246,.12),0 18px 70px rgba(109,74,255,.42)}
-}
-.status{
-  margin:24px 0 22px;
-  font-size:14px;
-}
-.status.error{color:var(--bad)}
-.status.good{color:var(--good)}
-.card{
-  width:min(100%,470px);
-  margin:0 auto;
-  padding:20px;
-  text-align:left;
-  background:rgba(16,20,27,.9);
-  border:1px solid var(--line);
-  border-radius:18px;
-}
-.label{
-  font-size:10px;
-  letter-spacing:.16em;
-  color:#8792a8;
-  margin-bottom:10px;
-}
-.heard{
-  min-height:24px;
-  font-size:15px;
-  line-height:1.5;
-}
-.connection{
-  margin-top:18px;
-  font-size:12px;
-  color:var(--muted);
-}
-.dot{
-  display:inline-block;
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  margin-right:7px;
-  background:#6b7280;
-}
-.dot.good{background:var(--good)}
-.note{
-  margin-top:20px;
-  color:#69758d;
-  font-size:12px;
-  line-height:1.5;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative OS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #08070b;
+      --panel: #111016;
+      --panel2: #17151d;
+      --border: rgba(255,255,255,.08);
+      --text: #f5f3f8;
+      --muted: #8d8997;
+      --accent: #9b7cff;
+      --accent2: #c19cff;
+      --green: #6ee7b7;
+      --yellow: #facc15;
+      --red: #fb7185;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 80% 0%, rgba(126,87,255,.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      width: 230px;
+      border-right: 1px solid var(--border);
+      padding: 28px 18px;
+      position: fixed;
+      inset: 0 auto 0 0;
+      background: rgba(8,7,11,.92);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand {
+      padding: 0 12px 30px;
+    }
+
+    .brand-name {
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -.5px;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: var(--panel2);
+      color: var(--text);
+    }
+
+    .nav button.active {
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+
+    .connection {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+      margin-right: 6px;
+    }
+
+    .dot.online {
+      background: var(--green);
+    }
+
+    /* MAIN */
+
+    .main {
+      margin-left: 230px;
+      width: calc(100% - 230px);
+      padding: 34px 42px 60px;
+      max-width: 1500px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 35px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 32px;
+      letter-spacing: -1.2px;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 7px;
+    }
+
+    /* VOICE */
+
+    .voice-button {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      border: 1px solid rgba(155,124,255,.35);
+      background: linear-gradient(145deg, #211936, #121019);
+      color: white;
+      cursor: pointer;
+      font-size: 22px;
+      box-shadow: 0 0 30px rgba(155,124,255,.12);
+      transition: .2s;
+    }
+
+    .voice-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(155,124,255,.22);
+    }
+
+    .voice-button.listening {
+      animation: pulse 1.2s infinite;
+      background: #291b42;
+    }
+
+    @keyframes pulse {
+      50% {
+        box-shadow: 0 0 45px rgba(155,124,255,.5);
+      }
+    }
+
+    .voice-status {
+      text-align: right;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 7px;
+    }
+
+    /* CARDS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(23,21,29,.95), rgba(14,13,18,.95));
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-top: 13px;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap: 18px;
+    }
+
+    .section {
+      background: rgba(17,16,22,.8);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .section-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .list {
+      padding: 6px 0;
+    }
+
+    .row {
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.045);
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row-main {
+      min-width: 0;
+    }
+
+    .row-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .row-meta {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .badge {
+      align-self: flex-start;
+      padding: 5px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .badge.high,
+    .badge.urgent {
+      color: var(--red);
+      background: rgba(251,113,133,.08);
+    }
+
+    .badge.completed {
+      color: var(--green);
+      background: rgba(110,231,183,.08);
+    }
+
+    .badge.progress {
+      color: var(--accent2);
+      background: rgba(155,124,255,.08);
+    }
+
+    .empty {
+      padding: 35px 20px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* PAGES */
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .full-section {
+      margin-top: 18px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .filter.active {
+      color: var(--text);
+      border-color: rgba(155,124,255,.4);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 950px) {
+      .sidebar {
+        width: 190px;
+      }
+
+      .main {
+        margin-left: 190px;
+        width: calc(100% - 190px);
+        padding: 28px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .app {
+        display: block;
+      }
+
+      .connection {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 24px 16px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<main class="app">
-  <div class="eyebrow">CREATIVE OS</div>
-  <h1>Voice Command</h1>
-  <p class="sub">Tap the microphone and speak a command.</p>
 
-  <button class="mic" id="micButton" aria-label="Start voice command">🎙️</button>
+<div class="app">
 
-  <div class="status" id="status">Ready</div>
+  <aside class="sidebar">
 
-  <section class="card">
-    <div class="label">HEARD</div>
-    <div class="heard" id="transcript">Nothing yet.</div>
-  </section>
+    <div class="brand">
+      <div class="brand-name">Creative OS</div>
+      <div class="brand-sub">Personal Creative System</div>
+    </div>
 
-  <div class="connection" id="connection">
-    <span class="dot"></span> Creative OS connection ready
-  </div>
+    <nav class="nav">
+      <button class="active" onclick="showPage('dashboard', this)">Overview</button>
+      <button onclick="showPage('tasks', this)">Tasks</button>
+      <button onclick="showPage('revisions', this)">Revisions</button>
+      <button onclick="showPage('inspiration', this)">Inspiration</button>
+      <button onclick="showPage('reminders', this)">Reminders</button>
+    </nav>
 
-  <div class="note">
-    Voice commands are sent to your Creative OS Apps Script backend.
-  </div>
-</main>
+    <div class="connection">
+      <span class="dot" id="connectionDot"></span>
+      <span id="connectionText">Connecting...</span>
+    </div>
+
+  </aside>
+
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="page active">
+
+      <div class="topbar">
+
+        <div>
+          <div class="eyebrow">Creative command center</div>
+          <h1>Good evening.</h1>
+          <div class="date" id="today"></div>
+        </div>
+
+        <div>
+          <button class="voice-button" id="micButton" onclick="toggleVoice()">🎙</button>
+          <div class="voice-status" id="voiceStatus">Tap to speak</div>
+        </div>
+
+      </div>
+
+
+      <div class="stats">
+
+        <div class="card">
+          <div class="stat-label">Active Tasks</div>
+          <div class="stat-value" id="activeTasks">—</div>
+          <div class="stat-note">Currently in progress</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Pending</div>
+          <div class="stat-value" id="pendingTasks">—</div>
+          <div class="stat-note">Tasks still to do</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Revisions</div>
+          <div class="stat-value" id="revisionCount">—</div>
+          <div class="stat-note">Needs attention</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Reminders</div>
+          <div class="stat-value" id="reminderCount">—</div>
+          <div class="stat-note">Upcoming</div>
+        </div>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+        <div class="section">
+
+          <div class="section-head">
+            <div class="section-title">Recent Tasks</div>
+            <div class="section-count" id="recentCount"></div>
+          </div>
+
+          <div class="list" id="recentTasks">
+            <div class="empty">Loading your creative universe...</div>
+          </div>
+
+        </div>
+
+
+        <div class="section">
+
+          <div class="section-head">
+            <div class="section-title">Upcoming</div>
+          </div>
+
+          <div class="list" id="upcoming">
+            <div class="empty">Loading...</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TASKS -->
+
+    <section id="tasks" class="page">
+
+      <div class="topbar">
+
+        <div>
+          <div class="eyebrow">Work management</div>
+          <h1>Tasks</h1>
+          <div class="date">Everything you're currently working on.</div>
+        </div>
+
+        <button class="voice-button" onclick="toggleVoice()">🎙</button>
+
+      </div>
+
+      <div class="section full-section">
+
+        <div class="section-head">
+
+          <div class="section-title">All Tasks</div>
+
+          <div class="toolbar">
+            <button class="filter active" onclick="filterTasks('all', this)">All</button>
+            <button class="filter" onclick="filterTasks('active', this)">Active</button>
+            <button class="filter" onclick="filterTasks('completed', this)">Completed</button>
+          </div>
+
+        </div>
+
+        <div class="list" id="tasksList">
+          <div class="empty">Loading...</div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- REVISIONS -->
+
+    <section id="revisions" class="page">
+
+      <div class="topbar">
+
+        <div>
+          <div class="eyebrow">Feedback loop</div>
+          <h1>Revisions</h1>
+          <div class="date">Track changes and client feedback.</div>
+        </div>
+
+      </div>
+
+      <div class="section full-section">
+
+        <div class="section-head">
+          <div class="section-title">Revision Watch</div>
+        </div>
+
+        <div class="list" id="revisionsList">
+          <div class="empty">Loading...</div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- INSPIRATION -->
+
+    <section id="inspiration" class="page">
+
+      <div class="topbar">
+
+        <div>
+          <div class="eyebrow">Creative fuel</div>
+          <h1>Inspiration</h1>
+          <div class="date">Ideas, references and things worth stealing legally.</div>
+        </div>
+
+      </div>
+
+      <div class="section full-section">
+
+        <div class="section-head">
+          <div class="section-title">Saved Inspiration</div>
+        </div>
+
+        <div class="list" id="inspirationList">
+          <div class="empty">Loading...</div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- REMINDERS -->
+
+    <section id="reminders" class="page">
+
+      <div class="topbar">
+
+        <div>
+          <div class="eyebrow">Don't forget</div>
+          <h1>Reminders</h1>
+          <div class="date">Because apparently human brains require external storage.</div>
+        </div>
+
+      </div>
+
+      <div class="section full-section">
+
+        <div class="section-head">
+          <div class="section-title">Upcoming Reminders</div>
+        </div>
+
+        <div class="list" id="remindersList">
+          <div class="empty">Loading...</div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
 
 <script>
-const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzVjQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
 
-const micButton = document.getElementById("micButton");
-const statusEl = document.getElementById("status");
-const transcriptEl = document.getElementById("transcript");
-const connectionEl = document.getElementById("connection");
+  /* =========================================================
+     CREATIVE OS BACKEND
+     ========================================================= */
 
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbzVjQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
 
-let recognition = null;
-let sending = false;
 
-function setStatus(text, type="") {
-  statusEl.textContent = text;
-  statusEl.className = "status" + (type ? " " + type : "");
-}
+  let dashboardData = null;
+  let allTasks = [];
+  let allRevisions = [];
+  let allInspirations = [];
+  let allReminders = [];
 
-function sendToCreativeOS(command) {
-  if (!command || sending) return;
 
-  sending = true;
-  setStatus("Sending command to Creative OS…");
+  /* =========================================================
+     DATE
+     ========================================================= */
 
-  /*
-    IMPORTANT:
-    Do not use fetch() here. GitHub Pages and Apps Script are different
-    origins, and the browser can block the response because of CORS.
+  document.getElementById("today").textContent =
+    new Date().toLocaleDateString("en-IN", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
 
-    A normal GET request through an image element is allowed by the browser
-    and still reaches the Apps Script endpoint. The backend receives:
-      voice=1
-      command=<spoken command>
-      text=<spoken command>
-      transcript=<spoken command>
-  */
-  const params = new URLSearchParams({
-    voice: "1",
-    command: command,
-    text: command,
-    transcript: command,
-    source: "creative-os-voice"
-  });
 
-  const beacon = new Image();
+  /* =========================================================
+     JSONP API
+     ========================================================= */
 
-  beacon.onload = () => {
-    sending = false;
-    setStatus("Command sent to Creative OS.", "good");
-    connectionEl.innerHTML =
-      '<span class="dot good"></span> Creative OS connected';
-  };
+  function api(action, extra = {}) {
 
-  beacon.onerror = () => {
-    /*
-      Apps Script may return a response that the browser does not expose
-      to this cross-origin image request even though the request itself
-      reached the server. Treat it as sent rather than falsely reporting
-      a connection failure.
-    */
-    sending = false;
-    setStatus("Command sent to Creative OS.", "good");
-    connectionEl.innerHTML =
-      '<span class="dot good"></span> Creative OS command sent';
-  };
+    return new Promise((resolve, reject) => {
 
-  beacon.src = APPS_SCRIPT_URL + "?" + params.toString();
+      const callbackName =
+        "creativeOS_" +
+        Date.now() +
+        "_" +
+        Math.floor(Math.random() * 10000);
 
-  // Keep the request object alive briefly.
-  window.setTimeout(() => {
-    try { beacon.remove(); } catch(e) {}
-  }, 10000);
-}
+      const params = new URLSearchParams();
 
-if (!SpeechRecognition) {
-  setStatus("Voice recognition is not supported in this browser.", "error");
-  micButton.disabled = true;
-} else {
-  recognition = new SpeechRecognition();
-  recognition.lang = "en-IN";
-  recognition.continuous = false;
-  recognition.interimResults = true;
-  recognition.maxAlternatives = 1;
+      params.set("api", "1");
+      params.set("action", action);
+      params.set("callback", callbackName);
 
-  recognition.onstart = () => {
-    micButton.classList.add("listening");
-    setStatus("Listening…");
-  };
+      Object.keys(extra).forEach(key => {
+        params.set(key, extra[key]);
+      });
 
-  recognition.onresult = (event) => {
-    let text = "";
 
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      text += event.results[i][0].transcript;
-    }
+      const script = document.createElement("script");
 
-    text = text.trim();
-    if (text) transcriptEl.textContent = text;
+      const timeout = setTimeout(() => {
 
-    const last = event.results[event.results.length - 1];
-    if (last && last.isFinal && text) {
-      sendToCreativeOS(text);
-    }
-  };
+        cleanup();
 
-  recognition.onerror = (event) => {
-    micButton.classList.remove("listening");
+        reject(new Error("Creative OS backend timed out."));
 
-    if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-      setStatus("Microphone access was blocked.", "error");
-    } else if (event.error === "no-speech") {
-      setStatus("I didn't hear anything. Try again.");
-    } else {
-      setStatus("Voice error: " + event.error, "error");
-    }
-  };
+      }, 15000);
 
-  recognition.onend = () => {
-    micButton.classList.remove("listening");
-    if (!sending && !statusEl.classList.contains("error")) {
-      setStatus("Ready");
-    }
-  };
 
-  micButton.addEventListener("click", () => {
-    if (sending) return;
+      function cleanup() {
 
-    transcriptEl.textContent = "Listening…";
-    setStatus("Listening…");
+        clearTimeout(timeout);
+
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+        try {
+          delete window[callbackName];
+        } catch (e) {}
+
+      }
+
+
+      window[callbackName] = function(data) {
+
+        cleanup();
+
+        if (data && data.success === false) {
+          reject(new Error(data.message || "Backend error."));
+          return;
+        }
+
+        resolve(data);
+
+      };
+
+
+      script.onerror = function() {
+
+        cleanup();
+
+        reject(new Error("Could not connect to Creative OS."));
+
+      };
+
+
+      script.src = API_URL + "?" + params.toString();
+
+      document.body.appendChild(script);
+
+    });
+
+  }
+
+
+  /* =========================================================
+     LOAD EVERYTHING
+     ========================================================= */
+
+  async function loadCreativeOS() {
 
     try {
-      recognition.start();
-    } catch (e) {
-      // Browser throws if start() is called while already listening.
-      try { recognition.stop(); } catch (_) {}
+
+      setConnection(true);
+
+      const [
+        dashboard,
+        tasks,
+        revisions,
+        inspiration,
+        reminders
+      ] = await Promise.all([
+        api("dashboard"),
+        api("tasks"),
+        api("revisions"),
+        api("inspiration"),
+        api("reminders")
+      ]);
+
+
+      dashboardData = dashboard;
+
+      allTasks = dashboard.tasks || tasks.tasks || [];
+      allRevisions = revisions.revisions || [];
+      allInspirations = inspiration.inspirations || [];
+      allReminders = reminders.reminders || [];
+
+
+      renderDashboard(dashboard);
+
+      renderTasks(allTasks);
+
+      renderRevisions(allRevisions);
+
+      renderInspirations(allInspirations);
+
+      renderReminders(allReminders);
+
+      setConnection(true);
+
+    } catch (error) {
+
+      console.error(error);
+
+      setConnection(false);
+
+      document.querySelectorAll(".empty").forEach(el => {
+        el.textContent = "Could not load Creative OS.";
+      });
+
     }
-  });
-}
+
+  }
+
+
+  /* =========================================================
+     CONNECTION
+     ========================================================= */
+
+  function setConnection(online) {
+
+    const dot = document.getElementById("connectionDot");
+    const text = document.getElementById("connectionText");
+
+    if (online) {
+      dot.classList.add("online");
+      text.textContent = "Creative OS connected";
+    } else {
+      dot.classList.remove("online");
+      text.textContent = "Connection failed";
+    }
+
+  }
+
+
+  /* =========================================================
+     DASHBOARD
+     ========================================================= */
+
+  function renderDashboard(data) {
+
+    const metrics = data.metrics || {};
+
+    document.getElementById("activeTasks").textContent =
+      metrics.activeTasks ??
+      metrics.inProgress ??
+      countStatus(allTasks, "In Progress");
+
+    document.getElementById("pendingTasks").textContent =
+      metrics.pendingTasks ??
+      countStatus(allTasks, "To Do");
+
+    document.getElementById("revisionCount").textContent =
+      (data.revisionWatch || []).length;
+
+    document.getElementById("reminderCount").textContent =
+      (data.reminders || allReminders || []).length;
+
+
+    const recent =
+      data.recentTasks ||
+      allTasks.slice(0, 8);
+
+    document.getElementById("recentCount").textContent =
+      recent.length + " items";
+
+    renderTaskRows(
+      document.getElementById("recentTasks"),
+      recent
+    );
+
+
+    const upcoming =
+      data.upcoming ||
+      allReminders.slice(0, 8);
+
+    renderUpcoming(
+      document.getElementById("upcoming"),
+      upcoming
+    );
+
+  }
+
+
+  /* =========================================================
+     TASKS
+     ========================================================= */
+
+  function renderTasks(tasks) {
+
+    renderTaskRows(
+      document.getElementById("tasksList"),
+      tasks
+    );
+
+  }
+
+
+  function renderTaskRows(container, tasks) {
+
+    if (!tasks || !tasks.length) {
+
+      container.innerHTML =
+        '<div class="empty">No tasks found.</div>';
+
+      return;
+
+    }
+
+
+    container.innerHTML = tasks.map(task => {
+
+      const status =
+        task.status ||
+        task.STATUS ||
+        "To Do";
+
+      const priority =
+        task.priority ||
+        task.PRIORITY ||
+        "";
+
+
+      const name =
+        task.task ||
+        task.TASK ||
+        "Untitled task";
+
+
+      const project =
+        task.project ||
+        task.PROJECT ||
+        task.courseJob ||
+        task["COURSE / JOB"] ||
+        "";
+
+
+      const id =
+        task.id ||
+        task.ID ||
+        "";
+
+
+      let badgeClass = "";
+
+      if (status === "Completed") {
+        badgeClass = "completed";
+      } else if (status === "In Progress") {
+        badgeClass = "progress";
+      } else if (
+        priority === "High" ||
+        priority === "Urgent"
+      ) {
+        badgeClass = priority.toLowerCase();
+      }
+
+
+      return `
+        <div class="row">
+
+          <div class="row-main">
+
+            <div class="row-title">
+              ${escapeHtml(name)}
+            </div>
+
+            <div class="row-meta">
+              ${escapeHtml(project)}
+              ${project && id ? " · " : ""}
+              ${escapeHtml(id)}
+            </div>
+
+          </div>
+
+          <div class="badge ${badgeClass}">
+            ${escapeHtml(status)}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  }
+
+
+  /* =========================================================
+     UPCOMING
+     ========================================================= */
+
+  function renderUpcoming(container, items) {
+
+    if (!items || !items.length) {
+
+      container.innerHTML =
+        '<div class="empty">Nothing upcoming.</div>';
+
+      return;
+
+    }
+
+
+    container.innerHTML = items.map(item => {
+
+      const title =
+        item.task ||
+        item.reminder ||
+        item.REMINDER ||
+        item.title ||
+        "Upcoming";
+
+
+      const date =
+        item.deadline ||
+        item.remindOn ||
+        item["REMIND ON"] ||
+        item.date ||
+        "";
+
+
+      return `
+        <div class="row">
+
+          <div class="row-main">
+
+            <div class="row-title">
+              ${escapeHtml(title)}
+            </div>
+
+            <div class="row-meta">
+              ${escapeHtml(formatDate(date))}
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  }
+
+
+  /* =========================================================
+     REVISIONS
+     ========================================================= */
+
+  function renderRevisions(revisions) {
+
+    const container =
+      document.getElementById("revisionsList");
+
+
+    if (!revisions || !revisions.length) {
+
+      container.innerHTML =
+        '<div class="empty">No revisions found.</div>';
+
+      return;
+
+    }
+
+
+    container.innerHTML = revisions.map(rev => {
+
+      const taskId =
+        rev.taskId ||
+        rev["TASK ID"] ||
+        "";
+
+      const reason =
+        rev.reason ||
+        rev["REASON / FEEDBACK"] ||
+        "Revision";
+
+
+      const status =
+        rev.status ||
+        rev.STATUS ||
+        "Pending";
+
+
+      return `
+        <div class="row">
+
+          <div class="row-main">
+
+            <div class="row-title">
+              ${escapeHtml(reason)}
+            </div>
+
+            <div class="row-meta">
+              ${escapeHtml(taskId)}
+            </div>
+
+          </div>
+
+          <div class="badge">
+            ${escapeHtml(status)}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  }
+
+
+  /* =========================================================
+     INSPIRATION
+     ========================================================= */
+
+  function renderInspirations(items) {
+
+    const container =
+      document.getElementById("inspirationList");
+
+
+    if (!items || !items.length) {
+
+      container.innerHTML =
+        '<div class="empty">No inspiration saved yet.</div>';
+
+      return;
+
+    }
+
+
+    container.innerHTML = items.map(item => {
+
+      const title =
+        item.title ||
+        item.TITLE ||
+        "Untitled";
+
+
+      const category =
+        item.category ||
+        item.CATEGORY ||
+        "";
+
+
+      const note =
+        item.note ||
+        item.NOTE ||
+        "";
+
+
+      return `
+        <div class="row">
+
+          <div class="row-main">
+
+            <div class="row-title">
+              ${escapeHtml(title)}
+            </div>
+
+            <div class="row-meta">
+              ${escapeHtml(category)}
+              ${category && note ? " · " : ""}
+              ${escapeHtml(note)}
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  }
+
+
+  /* =========================================================
+     REMINDERS
+     ========================================================= */
+
+  function renderReminders(items) {
+
+    const container =
+      document.getElementById("remindersList");
+
+
+    if (!items || !items.length) {
+
+      container.innerHTML =
+        '<div class="empty">No reminders found.</div>';
+
+      return;
+
+    }
+
+
+    container.innerHTML = items.map(item => {
+
+      const reminder =
+        item.reminder ||
+        item.REMINDER ||
+        "Reminder";
+
+
+      const date =
+        item.remindOn ||
+        item["REMIND ON"] ||
+        item.date ||
+        "";
+
+
+      const status =
+        item.status ||
+        item.STATUS ||
+        "To Do";
+
+
+      return `
+        <div class="row">
+
+          <div class="row-main">
+
+            <div class="row-title">
+              ${escapeHtml(reminder)}
+            </div>
+
+            <div class="row-meta">
+              ${escapeHtml(formatDate(date))}
+            </div>
+
+          </div>
+
+          <div class="badge">
+            ${escapeHtml(status)}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  }
+
+
+  /* =========================================================
+     FILTERS
+     ========================================================= */
+
+  function filterTasks(type, button) {
+
+    document.querySelectorAll(".filter")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+
+    let filtered = allTasks;
+
+
+    if (type === "active") {
+
+      filtered = allTasks.filter(task => {
+
+        const status =
+          task.status ||
+          task.STATUS ||
+          "";
+
+        return status !== "Completed";
+
+      });
+
+    }
+
+
+    if (type === "completed") {
+
+      filtered = allTasks.filter(task => {
+
+        const status =
+          task.status ||
+          task.STATUS ||
+          "";
+
+        return status === "Completed";
+
+      });
+
+    }
+
+
+    renderTasks(filtered);
+
+  }
+
+
+  /* =========================================================
+     NAVIGATION
+     ========================================================= */
+
+  function showPage(page, button) {
+
+    document.querySelectorAll(".page")
+      .forEach(p => p.classList.remove("active"));
+
+    document.getElementById(page)
+      .classList.add("active");
+
+
+    document.querySelectorAll(".nav button")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+  }
+
+
+  /* =========================================================
+     VOICE
+     ========================================================= */
+
+  let recognition = null;
+  let listening = false;
+
+
+  function setupVoice() {
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+      document.getElementById("voiceStatus").textContent =
+        "Voice unavailable";
+
+      return;
+
+    }
+
+
+    recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+
+    recognition.continuous = false;
+
+    recognition.interimResults = true;
+
+    recognition.maxAlternatives = 1;
+
+
+    recognition.onstart = function() {
+
+      listening = true;
+
+      document.getElementById("micButton")
+        .classList.add("listening");
+
+      document.getElementById("voiceStatus").textContent =
+        "Listening...";
+
+    };
+
+
+    recognition.onresult = function(event) {
+
+      let transcript = "";
+
+      for (
+        let i = event.resultIndex;
+        i < event.results.length;
+        i++
+      ) {
+
+        transcript +=
+          event.results[i][0].transcript;
+
+      }
+
+
+      document.getElementById("voiceStatus").textContent =
+        transcript || "Listening...";
+
+
+      if (
+        event.results[event.results.length - 1].isFinal
+      ) {
+
+        sendVoiceCommand(transcript);
+
+      }
+
+    };
+
+
+    recognition.onerror = function(event) {
+
+      console.error(event);
+
+      listening = false;
+
+      document.getElementById("micButton")
+        .classList.remove("listening");
+
+      document.getElementById("voiceStatus").textContent =
+        "Voice error";
+
+    };
+
+
+    recognition.onend = function() {
+
+      listening = false;
+
+      document.getElementById("micButton")
+        .classList.remove("listening");
+
+    };
+
+  }
+
+
+  function toggleVoice() {
+
+    if (!recognition) {
+      setupVoice();
+    }
+
+
+    if (!recognition) return;
+
+
+    if (listening) {
+
+      recognition.stop();
+
+      return;
+
+    }
+
+
+    document.getElementById("voiceStatus").textContent =
+      "Listening...";
+
+
+    try {
+
+      recognition.start();
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /* =========================================================
+     VOICE SEND
+     ========================================================= */
+
+  function sendVoiceCommand(command) {
+
+    command = String(command || "").trim();
+
+    if (!command) return;
+
+
+    document.getElementById("voiceStatus").textContent =
+      "Sending command...";
+
+
+    const params = new URLSearchParams();
+
+    params.set("voice", "1");
+
+    params.set("command", command);
+
+    params.set("text", command);
+
+    params.set("transcript", command);
+
+    params.set("source", "creative-os-dashboard");
+
+
+    const beacon = new Image();
+
+
+    beacon.onload = function() {
+
+      document.getElementById("voiceStatus").textContent =
+        "Command sent";
+
+      setTimeout(loadCreativeOS, 1200);
+
+    };
+
+
+    beacon.onerror = function() {
+
+      document.getElementById("voiceStatus").textContent =
+        "Command sent";
+
+      setTimeout(loadCreativeOS, 1200);
+
+    };
+
+
+    beacon.src =
+      API_URL + "?" + params.toString();
+
+  }
+
+
+  /* =========================================================
+     HELPERS
+     ========================================================= */
+
+  function countStatus(tasks, status) {
+
+    return tasks.filter(task => {
+
+      const current =
+        task.status ||
+        task.STATUS ||
+        "";
+
+      return current === status;
+
+    }).length;
+
+  }
+
+
+  function formatDate(value) {
+
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (isNaN(date)) {
+      return String(value);
+    }
+
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    });
+
+  }
+
+
+  function escapeHtml(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /* =========================================================
+     START
+     ========================================================= */
+
+  setupVoice();
+
+  loadCreativeOS();
+
 </script>
+
 </body>
 </html>
