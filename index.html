@@ -390,38 +390,25 @@ function callCreativeOS(command) {
       "_" +
       Math.floor(Math.random() * 1000000);
 
-
     const script =
       document.createElement("script");
 
-
-    const url =
-      new URL(APPS_SCRIPT_URL);
-
-
-    url.searchParams.set(
-      "voice",
-      "1"
-    );
-
-    url.searchParams.set(
-      "command",
-      command
-    );
-
-    url.searchParams.set(
-      "callback",
-      callbackName
-    );
-
-    url.searchParams.set(
-      "_",
-      Date.now()
-    );
-
+    /*
+     * IMPORTANT:
+     * Build the query string manually.
+     * Do NOT encode the entire query string.
+     * Each value is encoded separately so Google Apps Script
+     * receives voice, command, and callback as separate parameters.
+     */
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?voice=1" +
+      "&command=" + encodeURIComponent(command) +
+      "&callback=" + encodeURIComponent(callbackName) +
+      "&_=" + Date.now();
 
     let finished = false;
-
+    let timeout = null;
 
     function cleanup() {
 
@@ -431,34 +418,20 @@ function callCreativeOS(command) {
 
       finished = true;
 
-
       clearTimeout(timeout);
 
-
       if (script.parentNode) {
-
-        script.parentNode.removeChild(
-          script
-        );
-
+        script.parentNode.removeChild(script);
       }
-
 
       try {
-
         delete window[callbackName];
-
       } catch (e) {
-
-        window[callbackName] =
-          undefined;
-
+        window[callbackName] = undefined;
       }
-
     }
 
-
-    const timeout =
+    timeout =
       setTimeout(() => {
 
         cleanup();
@@ -471,12 +444,10 @@ function callCreativeOS(command) {
 
       }, 20000);
 
-
     window[callbackName] =
       function(data) {
 
         cleanup();
-
 
         if (!data) {
 
@@ -487,17 +458,12 @@ function callCreativeOS(command) {
           );
 
           return;
-
         }
 
-
         resolve(data);
-
       };
 
-
     script.async = true;
-
 
     script.onerror =
       function() {
@@ -512,28 +478,17 @@ function callCreativeOS(command) {
 
       };
 
-
     script.onload =
       function() {
-
         /*
-         * Apps Script can redirect the request.
-         * The JSONP callback should still execute.
-         *
-         * If the callback hasn't executed yet,
-         * the timeout remains active.
+         * Apps Script may redirect the request.
+         * The JSONP callback is expected to execute after the redirect.
          */
-
       };
 
+    script.src = requestUrl;
 
-    script.src =
-      url.toString();
-
-
-    document.body.appendChild(
-      script
-    );
+    document.body.appendChild(script);
 
   });
 
