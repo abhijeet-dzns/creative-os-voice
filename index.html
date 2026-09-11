@@ -101,10 +101,16 @@ h1 {
   transform: scale(1.03);
 }
 
+.mic:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 .mic.listening {
   background: #292930;
-  box-shadow: 0 0 0 12px rgba(255,255,255,.035),
-              0 0 40px rgba(255,255,255,.08);
+  box-shadow:
+    0 0 0 12px rgba(255,255,255,.035),
+    0 0 40px rgba(255,255,255,.08);
 }
 
 .status {
@@ -135,6 +141,7 @@ h1 {
   font-size: 14px;
   line-height: 1.5;
   color: #ddd;
+  word-break: break-word;
 }
 
 button.test {
@@ -150,6 +157,11 @@ button.test {
 
 button.test:hover {
   background: #25252b;
+}
+
+button.test:disabled {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
 .examples {
@@ -175,6 +187,10 @@ button.test:hover {
 .success {
   color: #8fdda7;
 }
+
+.warning {
+  color: #e6c477;
+}
 </style>
 </head>
 
@@ -183,49 +199,90 @@ button.test:hover {
 <div class="container">
 
   <div class="header">
-    <div class="eyebrow">Remote control</div>
-    <h1>Creative OS</h1>
-    <div class="subtitle">Voice command interface</div>
+
+    <div class="eyebrow">
+      Remote control
+    </div>
+
+    <h1>
+      Creative OS
+    </h1>
+
+    <div class="subtitle">
+      Voice command interface
+    </div>
 
     <div class="connection">
       <div id="connectionDot" class="dot"></div>
-      <span id="connectionText">Connecting...</span>
+      <span id="connectionText">
+        Connecting...
+      </span>
     </div>
+
   </div>
+
 
   <div class="card">
 
     <div class="mic-wrap">
-      <button id="micButton" class="mic">🎙</button>
+
+      <button
+        id="micButton"
+        class="mic"
+        type="button"
+        aria-label="Start voice command"
+      >
+        🎙
+      </button>
+
     </div>
 
+
     <div id="status" class="status">
-      Tap the microphone and speak.
+      Connecting to Creative OS...
     </div>
+
 
     <div class="output">
 
-      <div class="label">You said</div>
+      <div class="label">
+        You said
+      </div>
+
       <div id="transcript" class="box">
         Nothing yet.
       </div>
 
+
       <div style="margin-top:18px">
-        <div class="label">Creative OS</div>
+
+        <div class="label">
+          Creative OS
+        </div>
+
         <div id="result" class="box">
           Waiting for command.
         </div>
+
       </div>
 
     </div>
 
-    <button id="testButton" class="test">
+
+    <button
+      id="testButton"
+      class="test"
+      type="button"
+    >
       Test Creative OS connection
     </button>
 
+
     <div class="examples">
 
-      <div class="label">Try saying</div>
+      <div class="label">
+        Try saying
+      </div>
 
       <div class="example">
         “<span>Create a job task for Gbazar packaging</span>”
@@ -246,44 +303,81 @@ button.test:hover {
     </div>
 
   </div>
+
 </div>
 
+
 <script>
+
+/* =========================================================
+   CREATIVE OS CONNECTION
+   ========================================================= */
 
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbzVJQdj9vObfe4Hey6LQfaz_XIPYgMWryUyjkU2UTnWBGa_vafShRSHljzyYeFBogdTHw/exec";
 
-const micButton = document.getElementById("micButton");
-const testButton = document.getElementById("testButton");
-const statusText = document.getElementById("status");
-const transcriptBox = document.getElementById("transcript");
-const resultBox = document.getElementById("result");
-const connectionDot = document.getElementById("connectionDot");
-const connectionText = document.getElementById("connectionText");
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const micButton =
+  document.getElementById("micButton");
+
+const testButton =
+  document.getElementById("testButton");
+
+const statusText =
+  document.getElementById("status");
+
+const transcriptBox =
+  document.getElementById("transcript");
+
+const resultBox =
+  document.getElementById("result");
+
+const connectionDot =
+  document.getElementById("connectionDot");
+
+const connectionText =
+  document.getElementById("connectionText");
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
 
 let recognition = null;
 let listening = false;
 
 
 /* =========================================================
-   CONNECTION
+   CONNECTION STATUS
    ========================================================= */
 
 function setConnection(online) {
 
   if (online) {
+
     connectionDot.classList.add("online");
-    connectionText.textContent = "Creative OS connected";
+
+    connectionText.textContent =
+      "Creative OS connected";
+
   } else {
+
     connectionDot.classList.remove("online");
-    connectionText.textContent = "Connection failed";
+
+    connectionText.textContent =
+      "Connection failed";
+
   }
 
 }
 
 
 /* =========================================================
-   CREATIVE OS JSONP
+   JSONP REQUEST
    ========================================================= */
 
 function callCreativeOS(command) {
@@ -291,101 +385,155 @@ function callCreativeOS(command) {
   return new Promise((resolve, reject) => {
 
     const callbackName =
-      "creativeOSVoice_" +
+      "__creativeOS_" +
       Date.now() +
       "_" +
-      Math.floor(Math.random() * 100000);
+      Math.floor(Math.random() * 1000000);
 
-    const script = document.createElement("script");
 
-    const params = new URLSearchParams();
+    const script =
+      document.createElement("script");
 
-    params.set("voice", "1");
-    params.set("command", command);
-    params.set("callback", callbackName);
-    params.set("_", Date.now());
+
+    const url =
+      new URL(APPS_SCRIPT_URL);
+
+
+    url.searchParams.set(
+      "voice",
+      "1"
+    );
+
+    url.searchParams.set(
+      "command",
+      command
+    );
+
+    url.searchParams.set(
+      "callback",
+      callbackName
+    );
+
+    url.searchParams.set(
+      "_",
+      Date.now()
+    );
+
 
     let finished = false;
 
-    const timeout = setTimeout(() => {
 
-      finish();
+    function cleanup() {
 
-      reject(
-        new Error("Creative OS request timed out.")
-      );
-
-    }, 15000);
-
-
-    function finish() {
-
-      if (finished) return;
+      if (finished) {
+        return;
+      }
 
       finished = true;
 
+
       clearTimeout(timeout);
 
+
       if (script.parentNode) {
-        script.parentNode.removeChild(script);
+
+        script.parentNode.removeChild(
+          script
+        );
+
       }
 
+
       try {
+
         delete window[callbackName];
-      } catch (e) {}
+
+      } catch (e) {
+
+        window[callbackName] =
+          undefined;
+
+      }
 
     }
 
 
-    window[callbackName] = function(data) {
+    const timeout =
+      setTimeout(() => {
 
-      finish();
-
-      if (!data) {
-
-        reject(
-          new Error("Creative OS returned no response.")
-        );
-
-        return;
-      }
-
-      if (data.success === false) {
+        cleanup();
 
         reject(
           new Error(
-            data.message ||
-            "Creative OS returned an error."
+            "Creative OS request timed out."
           )
         );
 
-        return;
-      }
-
-      resolve(data);
-
-    };
+      }, 20000);
 
 
-    script.onerror = function() {
+    window[callbackName] =
+      function(data) {
 
-      finish();
+        cleanup();
 
-      reject(
-        new Error(
-          "Could not connect to Creative OS."
-        )
-      );
 
-    };
+        if (!data) {
+
+          reject(
+            new Error(
+              "Creative OS returned no response."
+            )
+          );
+
+          return;
+
+        }
+
+
+        resolve(data);
+
+      };
+
+
+    script.async = true;
+
+
+    script.onerror =
+      function() {
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Creative OS endpoint could not be loaded."
+          )
+        );
+
+      };
+
+
+    script.onload =
+      function() {
+
+        /*
+         * Apps Script can redirect the request.
+         * The JSONP callback should still execute.
+         *
+         * If the callback hasn't executed yet,
+         * the timeout remains active.
+         */
+
+      };
 
 
     script.src =
-      APPS_SCRIPT_URL +
-      "?" +
-      params.toString();
+      url.toString();
 
-    document.body.appendChild(script);
+
+    document.body.appendChild(
+      script
+    );
 
   });
 
@@ -398,37 +546,78 @@ function callCreativeOS(command) {
 
 async function sendVoiceCommand(command) {
 
+  if (!command) {
+    return;
+  }
+
+
   statusText.textContent =
     "Sending command to Creative OS...";
 
-  resultBox.className = "box";
-  resultBox.textContent = "Processing...";
+
+  resultBox.className =
+    "box";
+
+  resultBox.textContent =
+    "Processing...";
+
 
   try {
 
     const data =
       await callCreativeOS(command);
 
+
+    /*
+     * We successfully reached Apps Script.
+     * Even if the command itself is invalid,
+     * the connection is still alive.
+     */
+
     setConnection(true);
 
-    resultBox.className = "box success";
+
+    if (data.success === false) {
+
+      resultBox.className =
+        "box error";
+
+      resultBox.textContent =
+        data.message ||
+        "Creative OS could not process that command.";
+
+      statusText.textContent =
+        "Command not understood.";
+
+      return;
+
+    }
+
+
+    resultBox.className =
+      "box success";
 
     resultBox.textContent =
       data.message ||
       "Command completed.";
+
 
     statusText.textContent =
       "Command completed.";
 
   } catch (error) {
 
-    resultBox.className = "box error";
+    resultBox.className =
+      "box error";
 
     resultBox.textContent =
-      error.message;
+      error.message ||
+      "Could not reach Creative OS.";
+
 
     statusText.textContent =
-      "Command failed.";
+      "Connection failed.";
+
 
     setConnection(false);
 
@@ -443,24 +632,39 @@ async function sendVoiceCommand(command) {
 
 async function testConnection() {
 
+  testButton.disabled = true;
+
+
   statusText.textContent =
     "Testing Creative OS...";
 
-  resultBox.className = "box";
-  resultBox.textContent = "Connecting...";
+
+  resultBox.className =
+    "box";
+
+  resultBox.textContent =
+    "Connecting...";
+
 
   try {
 
     const data =
-      await callCreativeOS("connection test");
+      await callCreativeOS(
+        "connection test"
+      );
+
 
     setConnection(true);
 
-    resultBox.className = "box success";
+
+    resultBox.className =
+      "box success";
+
 
     resultBox.textContent =
       data.message ||
       "Creative OS is connected.";
+
 
     statusText.textContent =
       "Connection successful.";
@@ -469,15 +673,23 @@ async function testConnection() {
 
     setConnection(false);
 
-    resultBox.className = "box error";
+
+    resultBox.className =
+      "box error";
+
 
     resultBox.textContent =
-      error.message;
+      error.message ||
+      "Could not connect to Creative OS.";
+
 
     statusText.textContent =
       "Connection failed.";
 
   }
+
+
+  testButton.disabled = false;
 
 }
 
@@ -491,6 +703,7 @@ function setupVoice() {
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
+
 
   if (!SpeechRecognition) {
 
@@ -507,119 +720,172 @@ function setupVoice() {
   recognition =
     new SpeechRecognition();
 
-  recognition.lang = "en-IN";
 
-  recognition.continuous = false;
-
-  recognition.interimResults = false;
-
-  recognition.maxAlternatives = 1;
+  recognition.lang =
+    "en-IN";
 
 
-  recognition.onstart = function() {
-
-    listening = true;
-
-    micButton.classList.add("listening");
-
-    statusText.textContent =
-      "Listening...";
-
-    transcriptBox.textContent =
-      "Listening...";
-
-  };
+  recognition.continuous =
+    false;
 
 
-  recognition.onresult = function(event) {
+  recognition.interimResults =
+    false;
 
-    const command =
-      event.results[0][0].transcript
-        .trim();
 
-    transcriptBox.textContent =
-      command || "Nothing heard.";
+  recognition.maxAlternatives =
+    1;
 
-    if (!command) {
+
+  recognition.onstart =
+    function() {
+
+      listening = true;
+
+
+      micButton.classList.add(
+        "listening"
+      );
+
 
       statusText.textContent =
-        "I didn't hear a command.";
-
-      return;
-
-    }
-
-    sendVoiceCommand(command);
-
-  };
+        "Listening...";
 
 
-  recognition.onerror = function(event) {
+      transcriptBox.textContent =
+        "Listening...";
 
-    listening = false;
-
-    micButton.classList.remove("listening");
-
-    if (event.error === "not-allowed") {
-
-      statusText.textContent =
-        "Microphone permission was blocked.";
-
-    } else {
-
-      statusText.textContent =
-        "Voice recognition error: " +
-        event.error;
-
-    }
-
-  };
+    };
 
 
-  recognition.onend = function() {
+  recognition.onresult =
+    function(event) {
 
-    listening = false;
+      const command =
+        event.results[0][0]
+          .transcript
+          .trim();
 
-    micButton.classList.remove("listening");
 
-  };
+      transcriptBox.textContent =
+        command ||
+        "Nothing heard.";
+
+
+      if (!command) {
+
+        statusText.textContent =
+          "I didn't hear a command.";
+
+        return;
+
+      }
+
+
+      sendVoiceCommand(
+        command
+      );
+
+    };
+
+
+  recognition.onerror =
+    function(event) {
+
+      listening = false;
+
+
+      micButton.classList.remove(
+        "listening"
+      );
+
+
+      if (
+        event.error ===
+        "not-allowed"
+      ) {
+
+        statusText.textContent =
+          "Microphone permission was blocked.";
+
+      } else if (
+        event.error ===
+        "no-speech"
+      ) {
+
+        statusText.textContent =
+          "No speech detected.";
+
+      } else {
+
+        statusText.textContent =
+          "Voice recognition error: " +
+          event.error;
+
+      }
+
+    };
+
+
+  recognition.onend =
+    function() {
+
+      listening = false;
+
+
+      micButton.classList.remove(
+        "listening"
+      );
+
+    };
 
 }
 
 
 /* =========================================================
-   MICROPHONE BUTTON
+   MICROPHONE
    ========================================================= */
 
-micButton.addEventListener("click", function() {
+micButton.addEventListener(
+  "click",
+  function() {
 
-  if (!recognition) {
-    setupVoice();
+    if (!recognition) {
+
+      setupVoice();
+
+    }
+
+
+    if (!recognition) {
+      return;
+    }
+
+
+    if (listening) {
+
+      recognition.stop();
+
+      return;
+
+    }
+
+
+    try {
+
+      recognition.start();
+
+    } catch (error) {
+
+      console.log(
+        "Speech start:",
+        error
+      );
+
+    }
+
   }
-
-  if (!recognition) return;
-
-
-  if (listening) {
-
-    recognition.stop();
-
-    return;
-
-  }
-
-
-  try {
-
-    recognition.start();
-
-  } catch (error) {
-
-    console.log(error);
-
-  }
-
-});
+);
 
 
 /* =========================================================
@@ -633,12 +899,15 @@ testButton.addEventListener(
 
 
 /* =========================================================
-   START
+   INITIALIZE
    ========================================================= */
 
 setupVoice();
 
-testConnection();
+setTimeout(
+  testConnection,
+  300
+);
 
 </script>
 
